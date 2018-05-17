@@ -86,7 +86,7 @@ Kubernetes cluster 的概念筆記
 
 ---
 
-## STEP1: kubeadm minimum requirements
+## STEP 1: kubeadm minimum requirements
 
 我們主要參考的官方文件是這篇[Creating HA clusters with kubeadm](https://kubernetes.io/docs/setup/independent/high-availability/)，依照建議，我們需要每個 nodes (包括 masters) 都 apply kubeadm minimum requirements，相關的 guide line 在這 [Installing kubeadm](https://kubernetes.io/docs/setup/independent/install-kubeadm/#before-you-begin)，以下的指令都是用 root 身份執行
 - 所有的 masters, nodes 都要安裝且滿足 kubeadm minimum requirements
@@ -271,7 +271,7 @@ $ ssh k8s-m2 "sudo kubeadm init --config=/etc/kubernetes/config.yaml"
 
 應該還記得剛剛說要把 kubeadm join 記下來吧，加入 nodes 就非常 trivial 了，直接在每一個要加入負載的 nodes 上執行
 ```
-$ sudo kubeadm join --token 6fd455.dd6fb4fa31f47c93 IP_OF_K8S_M0:6443 --discovery-token-ca-cert-hash sha256:SOME_VERY_LONG_HASH
+$ sudo kubeadm join --token 6fd455.dd6fb4fa31f47c93 AWS_ELB_DNS_NAME_FOR_MASTER_NODES:6443 --discovery-token-ca-cert-hash sha256:SOME_VERY_LONG_HASH
 ```
 
 以上，即使是半自動的建立 Kubernetes 還是相當麻煩的，希望大家都建立成功
