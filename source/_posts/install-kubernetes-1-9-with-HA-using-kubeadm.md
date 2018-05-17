@@ -29,7 +29,7 @@ Kubernetes 佈署在哪裡還蠻重要的，比如說我們佈署在 AWS ，要�
 ## 預備知識
 
 當然首先要大概了解一下 Kubernetes 的架構，先看以下這張圖
-![](https://images2015.cnblogs.com/blog/892532/201705/892532-20170530111847102-1480506150.png)
+![](https://d33wubrfki0l68.cloudfront.net/2555d34e3008aab4b049ca5634cfabc2078ccf92/3269a/images/docs/ha.svg)
 [photo credit](https://kubernetes.io/docs/admin/high-availability/building/)
 
 Kubernetes cluster 的概念筆記
@@ -81,8 +81,14 @@ Kubernetes cluster 的概念筆記
 不過這張圖少了 jumpy，jumpy 必須要能免密碼 ssh 到每個 ec2 instance
 我們會有 7 個 ec2 instance
 - jumpy
-- k8s-m0, k8s-m1, k8s-m2
-- k8s-n0, k8s-n1, k8s-n2
+- masters
+    - k8s-m0
+    - k8s-m1
+    - k8s-m2
+- nodes
+    - k8s-n0
+    - k8s-n1
+    - k8s-n2
 
 ---
 
@@ -156,7 +162,9 @@ reboot
 
 ## STEP 2: 建立 ETCD cluster
 
-這部分比較繁瑣，另外開一篇解釋
+ETCD 就像是 zookeeper 一類 key-value 的 store，在 Kubernetes cluster 裡扮演的是紀錄整個 cluster 狀態的角色，可以以 daemon 方式佈署、以 static pod 的方式佈署，或是佈署在其他的 EC2 instances。官方教學有教 daemon 和 pod 的兩種佈署方式，但是 pod 的佈署方式有點像雞生蛋蛋生雞的問題，如果 ETCD cluster 沒起來，那 Kubernetes 怎麼起來？可能要先佈一個 ETCD daemon -> 起 Kubernetes cluster -> 在 Kubernetes cluster 裡起 ETCD cluster -> 資料從 K8S cluster 外的 ETCD daemon migrate 到 K8S cluster 內的 ETCD cluster ，用手動的方式想到就覺得麻煩…所以我們這邊會直接用 daemon 的方式佈署 ETCD cluster，分別在 3 個 masters 上
+
+這部分比較繁瑣，而且 ETCD cluster 不僅可以用在紀錄 Kubernets 的狀態，也可以用在 general 需要 Key-Value 的場景，所以我們會另外開一篇解釋如何安裝。需要注意的是，如果需要 reset kubeadm ，由於 ETCD cluster 若以 daemon 的方式佈署在 K8S cluster 之外，那執行 kubeadm reset 之後，需要先停掉 3 台 ETCD cluster -> 清除各自 /var/lib/etcd/member 下的所有資料 -> 重啟 ETCD cluster ，這樣原先的 K8S cluster 資料才會被完全清除
 
 ---
 

@@ -110,13 +110,13 @@
 <meta property="og:site_name" content="YIIDTW">
 <meta property="og:description" content="最近在 AWS 用上了 Kubernetes ，試了幾套工具之後，決定使用 kubeadm 來安裝高可用群集。但是，請注意 kubeadm 仍然在 beta 階段，如果要嘗試，官方文件建議定期備份 etcd 在寫這篇文章的時候 kubeadm 還不直接支援 HA ，必須手動配置，官方文件照著做會踩到坑，這篇就稍微說一下踩坑的經歷。除了 kubeadm，還 survey 過幾種部署方式：  kops">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:image" content="https://images2015.cnblogs.com/blog/892532/201705/892532-20170530111847102-1480506150.png">
+<meta property="og:image" content="https://d33wubrfki0l68.cloudfront.net/2555d34e3008aab4b049ca5634cfabc2078ccf92/3269a/images/docs/ha.svg">
 <meta property="og:image" content="https://cdn-images-1.medium.com/max/1200/1*NbqO1_Lj74b38g-hq3OxPg.png">
-<meta property="og:updated_time" content="2018-05-17T07:43:14.000Z">
+<meta property="og:updated_time" content="2018-05-17T15:47:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster">
 <meta name="twitter:description" content="最近在 AWS 用上了 Kubernetes ，試了幾套工具之後，決定使用 kubeadm 來安裝高可用群集。但是，請注意 kubeadm 仍然在 beta 階段，如果要嘗試，官方文件建議定期備份 etcd 在寫這篇文章的時候 kubeadm 還不直接支援 HA ，必須手動配置，官方文件照著做會踩到坑，這篇就稍微說一下踩坑的經歷。除了 kubeadm，還 survey 過幾種部署方式：  kops">
-<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/892532/201705/892532-20170530111847102-1480506150.png">
+<meta name="twitter:image" content="https://d33wubrfki0l68.cloudfront.net/2555d34e3008aab4b049ca5634cfabc2078ccf92/3269a/images/docs/ha.svg">
 
 
 
@@ -223,22 +223,6 @@
           <li class="menu-item menu-item-home">
     <a href="/blog/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-    <a href="/blog/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-    <a href="/blog/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
   </li>
         
         
@@ -356,7 +340,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-05-17 15:43:14" itemprop="dateModified" datetime="2018-05-17T15:43:14+08:00">2018-05-17</time>
+                <time title="Modified: 2018-05-17 23:47:06" itemprop="dateModified" datetime="2018-05-17T23:47:06+08:00">2018-05-17</time>
               
             
           </span>
@@ -365,9 +349,31 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/blog/2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
+          
+             <span id="/blog/2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/" class="leancloud_visitors" data-flag-title="使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
           
 
           
@@ -405,7 +411,7 @@
 </ul>
 <p>對我而言，我希望雲端和 on premise 是同一套佈署方式，所以我採用 kubeadm ，除此之外，我在使用 kubespray 和 rancher 的時候，分別遇到了 worker node 無法 scale 還有 rancher 管理用的 pod 起太多吃我太多資源的問題，也許有人用這兩個工具用得很愉快，不過我對 kubespray 和 rancher 已失去耐心，然後 kops 需要的 prerequisite 太多，包括預先就要準備 cluster 用的 DNS name 和額外需要 S3 bucket 儲存 cluster 所需要的設定檔，還有 auto scaling group 、各種 IAM role 和 tag 設定，也讓我對 kops 興致缺缺， kops 看起來更像 Kubernetes + Cloud infra 的全家桶，而我僅需要一個協助我部署 Kubernetes 、有效且可靠的中間件，於是我後來選擇了 kubeadm</p>
 <hr>
-<h2 id="預備知識"><a href="#預備知識" class="headerlink" title="預備知識"></a>預備知識</h2><p>當然首先要大概了解一下 Kubernetes 的架構，先看以下這張圖<br><img src="https://images2015.cnblogs.com/blog/892532/201705/892532-20170530111847102-1480506150.png" alt=""><br><a href="https://kubernetes.io/docs/admin/high-availability/building/" target="_blank" rel="noopener">photo credit</a></p>
+<h2 id="預備知識"><a href="#預備知識" class="headerlink" title="預備知識"></a>預備知識</h2><p>當然首先要大概了解一下 Kubernetes 的架構，先看以下這張圖<br><img src="https://d33wubrfki0l68.cloudfront.net/2555d34e3008aab4b049ca5634cfabc2078ccf92/3269a/images/docs/ha.svg" alt=""><br><a href="https://kubernetes.io/docs/admin/high-availability/building/" target="_blank" rel="noopener">photo credit</a></p>
 <p>Kubernetes cluster 的概念筆記</p>
 <ul>
 <li>整個 Kubernetes cluster 分成多個 masters 和多個 nodes(workers) ，在 AWS 的環境中我們會使用 AWS ELB 作為 master nodes 的 load balancer ，如果是 on premise 的情況，可以使用 keepalived 的實作</li>
@@ -455,11 +461,21 @@
 <p>不過這張圖少了 jumpy，jumpy 必須要能免密碼 ssh 到每個 ec2 instance<br>我們會有 7 個 ec2 instance</p>
 <ul>
 <li>jumpy</li>
-<li>k8s-m0, k8s-m1, k8s-m2</li>
-<li>k8s-n0, k8s-n1, k8s-n2</li>
+<li>masters<ul>
+<li>k8s-m0</li>
+<li>k8s-m1</li>
+<li>k8s-m2</li>
+</ul>
+</li>
+<li>nodes<ul>
+<li>k8s-n0</li>
+<li>k8s-n1</li>
+<li>k8s-n2</li>
+</ul>
+</li>
 </ul>
 <hr>
-<h2 id="STEP1-kubeadm-minimum-requirements"><a href="#STEP1-kubeadm-minimum-requirements" class="headerlink" title="STEP1: kubeadm minimum requirements"></a>STEP1: kubeadm minimum requirements</h2><p>我們主要參考的官方文件是這篇<a href="https://kubernetes.io/docs/setup/independent/high-availability/" target="_blank" rel="noopener">Creating HA clusters with kubeadm</a>，依照建議，我們需要每個 nodes (包括 masters) 都 apply kubeadm minimum requirements，相關的 guide line 在這 <a href="https://kubernetes.io/docs/setup/independent/install-kubeadm/#before-you-begin" target="_blank" rel="noopener">Installing kubeadm</a>，以下的指令都是用 root 身份執行</p>
+<h2 id="STEP-1-kubeadm-minimum-requirements"><a href="#STEP-1-kubeadm-minimum-requirements" class="headerlink" title="STEP 1: kubeadm minimum requirements"></a>STEP 1: kubeadm minimum requirements</h2><p>我們主要參考的官方文件是這篇<a href="https://kubernetes.io/docs/setup/independent/high-availability/" target="_blank" rel="noopener">Creating HA clusters with kubeadm</a>，依照建議，我們需要每個 nodes (包括 masters) 都 apply kubeadm minimum requirements，相關的 guide line 在這 <a href="https://kubernetes.io/docs/setup/independent/install-kubeadm/#before-you-begin" target="_blank" rel="noopener">Installing kubeadm</a>，以下的指令都是用 root 身份執行</p>
 <ul>
 <li>所有的 masters, nodes 都要安裝且滿足 kubeadm minimum requirements</li>
 <li>jumpy 上只須安裝 kubectl，如果為了產生 kubeadm 的 token 方便，也可以裝個 kubeadm</li>
@@ -472,7 +488,8 @@
 <p>這裡要把 kubeadm 預設用的 cgroup driver 改成跟 dockerd 用的 cgroupfs 一樣<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sed -i &quot;s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g&quot; /etc/systemd/system/kubelet.service.d/10-kubeadm.conf</span><br><span class="line">$ systemctl daemon-reload &amp;&amp; systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br></pre></td></tr></table></figure></p>
 <h3 id="關閉-selinux-再重啟-EC2-instance"><a href="#關閉-selinux-再重啟-EC2-instance" class="headerlink" title="關閉 selinux 再重啟 EC2 instance"></a>關閉 selinux 再重啟 EC2 instance</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config</span><br><span class="line">sed -i &apos;s/SELINUX=permissive/SELINUX=disabled/g&apos; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
 <hr>
-<h2 id="STEP-2-建立-ETCD-cluster"><a href="#STEP-2-建立-ETCD-cluster" class="headerlink" title="STEP 2: 建立 ETCD cluster"></a>STEP 2: 建立 ETCD cluster</h2><p>這部分比較繁瑣，另外開一篇解釋</p>
+<h2 id="STEP-2-建立-ETCD-cluster"><a href="#STEP-2-建立-ETCD-cluster" class="headerlink" title="STEP 2: 建立 ETCD cluster"></a>STEP 2: 建立 ETCD cluster</h2><p>ETCD 就像是 zookeeper 一類 key-value 的 store，在 Kubernetes cluster 裡扮演的是紀錄整個 cluster 狀態的角色，可以以 daemon 方式佈署、以 static pod 的方式佈署，或是佈署在其他的 EC2 instances。官方教學有教 daemon 和 pod 的兩種佈署方式，但是 pod 的佈署方式有點像雞生蛋蛋生雞的問題，如果 ETCD cluster 沒起來，那 Kubernetes 怎麼起來？可能要先佈一個 ETCD daemon -&gt; 起 Kubernetes cluster -&gt; 在 Kubernetes cluster 裡起 ETCD cluster -&gt; 資料從 K8S cluster 外的 ETCD daemon migrate 到 K8S cluster 內的 ETCD cluster ，用手動的方式想到就覺得麻煩…所以我們這邊會直接用 daemon 的方式佈署 ETCD cluster，分別在 3 個 masters 上</p>
+<p>這部分比較繁瑣，而且 ETCD cluster 不僅可以用在紀錄 Kubernets 的狀態，也可以用在 general 需要 Key-Value 的場景，所以我們會另外開一篇解釋如何安裝。需要注意的是，如果需要 reset kubeadm ，由於 ETCD cluster 若以 daemon 的方式佈署在 K8S cluster 之外，那執行 kubeadm reset 之後，需要先停掉 3 台 ETCD cluster -&gt; 清除各自 /var/lib/etcd/member 下的所有資料 -&gt; 重啟 ETCD cluster ，這樣原先的 K8S cluster 資料才會被完全清除</p>
 <hr>
 <h2 id="STEP-3-建立第一台-master"><a href="#STEP-3-建立第一台-master" class="headerlink" title="STEP 3: 建立第一台 master"></a>STEP 3: 建立第一台 master</h2><p>首先，我們要先產生 kubeadm 所需的 token，寫在 config.yaml 裡<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubeadm token generate</span><br><span class="line">6fd455.dd6fb4fa31f47c93</span><br></pre></td></tr></table></figure></p>
 <p>config.yaml 會長得像這樣<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: kubeadm.k8s.io/v1alpha1</span><br><span class="line">kind: MasterConfiguration</span><br><span class="line">token: &quot;6fd455.dd6fb4fa31f47c93&quot;</span><br><span class="line">tokenTTL: &quot;0&quot;</span><br><span class="line">etcd:</span><br><span class="line">  endpoints:</span><br><span class="line">  - https://IP_OF_K8S_M0:2379</span><br><span class="line">  - https://IP_OF_K8S_M1:2379</span><br><span class="line">  - https://IP_OF_K8S_M2:2379</span><br><span class="line">  caFile: /etc/etcd/ssl/ca.pem</span><br><span class="line">  certFile: /etc/etcd/ssl/client.pem</span><br><span class="line">  keyFile: /etc/etcd/ssl/client-key.pem</span><br><span class="line">networking:</span><br><span class="line">  podSubnet: 10.244.0.0/16</span><br><span class="line">kubernetesVersion: 1.9.1</span><br><span class="line">apiServerCertSANs:</span><br><span class="line">- 127.0.0.1</span><br><span class="line">- IP_OF_K8S_M0</span><br><span class="line">- IP_OF_K8S_M1</span><br><span class="line">- IP_OF_K8S_M2</span><br><span class="line">- HOSTNAME_OF_K8S_M0</span><br><span class="line">- HOSTNAME_OF_K8S_M1</span><br><span class="line">- HOSTNAME_OF_K8S_M2</span><br><span class="line">- AWS_ELB_DNS_NAME_FOR_MASTER_NODES</span><br><span class="line">apiServerExtraArgs:</span><br><span class="line">  endpoint-reconciler-type: lease</span><br></pre></td></tr></table></figure></p>
@@ -494,7 +511,7 @@
 <li>所有 pods 尤其是 kube-dns 和 flannel 是不是正常</li>
 </ul>
 <hr>
-<h2 id="STEP-5-加入-nodes"><a href="#STEP-5-加入-nodes" class="headerlink" title="STEP 5: 加入 nodes"></a>STEP 5: 加入 nodes</h2><p>應該還記得剛剛說要把 kubeadm join 記下來吧，加入 nodes 就非常 trivial 了，直接在每一個要加入負載的 nodes 上執行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo kubeadm join --token 6fd455.dd6fb4fa31f47c93 IP_OF_K8S_M0:6443 --discovery-token-ca-cert-hash sha256:SOME_VERY_LONG_HASH</span><br></pre></td></tr></table></figure></p>
+<h2 id="STEP-5-加入-nodes"><a href="#STEP-5-加入-nodes" class="headerlink" title="STEP 5: 加入 nodes"></a>STEP 5: 加入 nodes</h2><p>應該還記得剛剛說要把 kubeadm join 記下來吧，加入 nodes 就非常 trivial 了，直接在每一個要加入負載的 nodes 上執行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo kubeadm join --token 6fd455.dd6fb4fa31f47c93 AWS_ELB_DNS_NAME_FOR_MASTER_NODES:6443 --discovery-token-ca-cert-hash sha256:SOME_VERY_LONG_HASH</span><br></pre></td></tr></table></figure></p>
 <p>以上，即使是半自動的建立 Kubernetes 還是相當麻煩的，希望大家都建立成功</p>
 
       
@@ -566,6 +583,16 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
 
   
 
@@ -686,7 +713,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#預備知識"><span class="nav-number">1.</span> <span class="nav-text">預備知識</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Component-Version"><span class="nav-number">2.</span> <span class="nav-text">Component Version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-AWS-Environment"><span class="nav-number">3.</span> <span class="nav-text">Create AWS Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP1-kubeadm-minimum-requirements"><span class="nav-number">4.</span> <span class="nav-text">STEP1: kubeadm minimum requirements</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#network"><span class="nav-number">4.1.</span> <span class="nav-text">network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關閉-swap"><span class="nav-number">4.2.</span> <span class="nav-text">關閉 swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安裝-docker-17-03-2-ce"><span class="nav-number">4.3.</span> <span class="nav-text">安裝 docker 17.03.2.ce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安裝-kubelet-kubeadm-kubectl-1-9-1"><span class="nav-number">4.4.</span> <span class="nav-text">安裝 kubelet, kubeadm, kubectl 1.9.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關閉-selinux-再重啟-EC2-instance"><span class="nav-number">4.5.</span> <span class="nav-text">關閉 selinux 再重啟 EC2 instance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-2-建立-ETCD-cluster"><span class="nav-number">5.</span> <span class="nav-text">STEP 2: 建立 ETCD cluster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-3-建立第一台-master"><span class="nav-number">6.</span> <span class="nav-text">STEP 3: 建立第一台 master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-4：建立其他台-master"><span class="nav-number">7.</span> <span class="nav-text">STEP 4：建立其他台 master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-5-加入-nodes"><span class="nav-number">8.</span> <span class="nav-text">STEP 5: 加入 nodes</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#預備知識"><span class="nav-number">1.</span> <span class="nav-text">預備知識</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Component-Version"><span class="nav-number">2.</span> <span class="nav-text">Component Version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-AWS-Environment"><span class="nav-number">3.</span> <span class="nav-text">Create AWS Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-1-kubeadm-minimum-requirements"><span class="nav-number">4.</span> <span class="nav-text">STEP 1: kubeadm minimum requirements</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#network"><span class="nav-number">4.1.</span> <span class="nav-text">network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關閉-swap"><span class="nav-number">4.2.</span> <span class="nav-text">關閉 swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安裝-docker-17-03-2-ce"><span class="nav-number">4.3.</span> <span class="nav-text">安裝 docker 17.03.2.ce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安裝-kubelet-kubeadm-kubectl-1-9-1"><span class="nav-number">4.4.</span> <span class="nav-text">安裝 kubelet, kubeadm, kubectl 1.9.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關閉-selinux-再重啟-EC2-instance"><span class="nav-number">4.5.</span> <span class="nav-text">關閉 selinux 再重啟 EC2 instance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-2-建立-ETCD-cluster"><span class="nav-number">5.</span> <span class="nav-text">STEP 2: 建立 ETCD cluster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-3-建立第一台-master"><span class="nav-number">6.</span> <span class="nav-text">STEP 3: 建立第一台 master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-4：建立其他台-master"><span class="nav-number">7.</span> <span class="nav-text">STEP 4：建立其他台 master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-5-加入-nodes"><span class="nav-number">8.</span> <span class="nav-text">STEP 5: 加入 nodes</span></a></li></ol></div>
             
 
           </div>
@@ -833,6 +860,31 @@
 
   
 
+  
+    <script id="dsq-count-scr" src="https://yiidtw.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yiidtw.github.io/blog/2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/';
+        this.page.identifier = '2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/';
+        this.page.title = '使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yiidtw.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
 
 
 	
@@ -847,10 +899,6 @@
 
 
 
-  
-
-
-
 
 
 
@@ -865,6 +913,102 @@
 
 
   
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kwL7BgyA2RkLswGBiifs2bVf-gzGzoHsz", "fC1HqhCnxuN9PuP85up8lvwW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
 
   
 
