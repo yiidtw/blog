@@ -111,7 +111,8 @@
 <meta property="og:description" content="最近在 AWS 用上了 Kubernetes ，試了幾套工具之後，決定使用 kubeadm 來安裝高可用群集。但是，請注意 kubeadm 仍然在 beta 階段，如果要嘗試，官方文件建議定期備份 etcd 在寫這篇文章的時候 kubeadm 還不直接支援 HA ，必須手動配置，官方文件照著做會踩到坑，這篇就稍微說一下踩坑的經歷。除了 kubeadm，還 survey 過幾種部署方式：  kops">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/892532/201705/892532-20170530111847102-1480506150.png">
-<meta property="og:updated_time" content="2018-05-15T12:36:34.000Z">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1200/1*NbqO1_Lj74b38g-hq3OxPg.png">
+<meta property="og:updated_time" content="2018-05-17T07:43:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster">
 <meta name="twitter:description" content="最近在 AWS 用上了 Kubernetes ，試了幾套工具之後，決定使用 kubeadm 來安裝高可用群集。但是，請注意 kubeadm 仍然在 beta 階段，如果要嘗試，官方文件建議定期備份 etcd 在寫這篇文章的時候 kubeadm 還不直接支援 HA ，必須手動配置，官方文件照著做會踩到坑，這篇就稍微說一下踩坑的經歷。除了 kubeadm，還 survey 過幾種部署方式：  kops">
@@ -338,12 +339,24 @@
                 
               
 
-              <time title="Created: 2018-05-15 13:48:12 / Modified: 20:36:34" itemprop="dateCreated datePublished" datetime="2018-05-15T13:48:12+08:00">2018-05-15</time>
+              <time title="Created: 2018-05-15 13:48:12" itemprop="dateCreated datePublished" datetime="2018-05-15T13:48:12+08:00">2018-05-15</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-05-17 15:43:14" itemprop="dateModified" datetime="2018-05-17T15:43:14+08:00">2018-05-17</time>
               
             
           </span>
@@ -392,18 +405,19 @@
 </ul>
 <p>對我而言，我希望雲端和 on premise 是同一套佈署方式，所以我採用 kubeadm ，除此之外，我在使用 kubespray 和 rancher 的時候，分別遇到了 worker node 無法 scale 還有 rancher 管理用的 pod 起太多吃我太多資源的問題，也許有人用這兩個工具用得很愉快，不過我對 kubespray 和 rancher 已失去耐心，然後 kops 需要的 prerequisite 太多，包括預先就要準備 cluster 用的 DNS name 和額外需要 S3 bucket 儲存 cluster 所需要的設定檔，還有 auto scaling group 、各種 IAM role 和 tag 設定，也讓我對 kops 興致缺缺， kops 看起來更像 Kubernetes + Cloud infra 的全家桶，而我僅需要一個協助我部署 Kubernetes 、有效且可靠的中間件，於是我後來選擇了 kubeadm</p>
 <hr>
-<h2 id="預備知識"><a href="#預備知識" class="headerlink" title="預備知識"></a>預備知識</h2><p>當然首先要大概了解一下 Kubernetes 的架構，先看以下這張圖<br><img src="https://images2015.cnblogs.com/blog/892532/201705/892532-20170530111847102-1480506150.png" alt=""><br><a href="http://www.itread01.com/content/1496132408.html" target="_blank" rel="noopener">photo credit</a></p>
+<h2 id="預備知識"><a href="#預備知識" class="headerlink" title="預備知識"></a>預備知識</h2><p>當然首先要大概了解一下 Kubernetes 的架構，先看以下這張圖<br><img src="https://images2015.cnblogs.com/blog/892532/201705/892532-20170530111847102-1480506150.png" alt=""><br><a href="https://kubernetes.io/docs/admin/high-availability/building/" target="_blank" rel="noopener">photo credit</a></p>
+<p>Kubernetes cluster 的概念筆記</p>
 <ul>
 <li>整個 Kubernetes cluster 分成多個 masters 和多個 nodes(workers) ，在 AWS 的環境中我們會使用 AWS ELB 作為 master nodes 的 load balancer ，如果是 on premise 的情況，可以使用 keepalived 的實作</li>
 <li>為了安全起見，我們的 masters 不參與工作負載</li>
 <li>kubectl 會在 cluster 外下達各種 control 指令</li>
-<li>master components<ul>
+<li>master 的重要元件<ul>
 <li>kube-apiserver </li>
 <li>kube-scheduler</li>
 <li>kube-controller-manager</li>
 </ul>
 </li>
-<li>node components<ul>
+<li>node 的重要元件<ul>
 <li>kubelet: pod 的管家，管理 pod 的 life-cycle</li>
 <li>kube-proxy</li>
 </ul>
@@ -437,8 +451,51 @@
 <li>1 個 ELB 作為服務的 load balancer ，我們會接在 nodes 的 NodePort 上</li>
 <li>[WARNING] 這種部署方法不需要 AWS 作 IAM role 或 tag 的額外設定</li>
 </ul>
+<p>借別人的參考圖用<br><img src="https://cdn-images-1.medium.com/max/1200/1*NbqO1_Lj74b38g-hq3OxPg.png" alt=""><br><a href="https://medium.com/@bambash/ha-kubernetes-cluster-via-kubeadm-b2133360b198" target="_blank" rel="noopener">photo credit</a> </p>
+<p>不過這張圖少了 jumpy，jumpy 必須要能免密碼 ssh 到每個 ec2 instance<br>我們會有 7 個 ec2 instance</p>
+<ul>
+<li>jumpy</li>
+<li>k8s-m0, k8s-m1, k8s-m2</li>
+<li>k8s-n0, k8s-n1, k8s-n2</li>
+</ul>
 <hr>
-<h2 id="kubeadm-minimum-requirements"><a href="#kubeadm-minimum-requirements" class="headerlink" title="kubeadm minimum requirements"></a>kubeadm minimum requirements</h2><p>我們主要參考的官方文件是這篇<a href="https://kubernetes.io/docs/setup/independent/high-availability/" target="_blank" rel="noopener">Creating HA clusters with kubeadm</a>，依照建議，我們需要每個 nodes (包括 masters) 都 apply kubeadm minimum requirements，相關的 guide line 在這 <a href="https://kubernetes.io/docs/setup/independent/install-kubeadm/#before-you-begin" target="_blank" rel="noopener">Installing kubeadm</a></p>
+<h2 id="STEP1-kubeadm-minimum-requirements"><a href="#STEP1-kubeadm-minimum-requirements" class="headerlink" title="STEP1: kubeadm minimum requirements"></a>STEP1: kubeadm minimum requirements</h2><p>我們主要參考的官方文件是這篇<a href="https://kubernetes.io/docs/setup/independent/high-availability/" target="_blank" rel="noopener">Creating HA clusters with kubeadm</a>，依照建議，我們需要每個 nodes (包括 masters) 都 apply kubeadm minimum requirements，相關的 guide line 在這 <a href="https://kubernetes.io/docs/setup/independent/install-kubeadm/#before-you-begin" target="_blank" rel="noopener">Installing kubeadm</a>，以下的指令都是用 root 身份執行</p>
+<ul>
+<li>所有的 masters, nodes 都要安裝且滿足 kubeadm minimum requirements</li>
+<li>jumpy 上只須安裝 kubectl，如果為了產生 kubeadm 的 token 方便，也可以裝個 kubeadm</li>
+</ul>
+<h3 id="network"><a href="#network" class="headerlink" title="network"></a>network</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.conf</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">EOF</span><br><span class="line">$ modprobe br_netfilter</span><br></pre></td></tr></table></figure>
+<p>然後方便起見，而且佈署的環境在 AWS 內部，node 不會暴露在公網，所以我們把 firewalld 直接關掉，或是直接乾脆不裝，如果要啟用 firewalld ，要開的 port 請參考官網<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl stop firewalld</span><br></pre></td></tr></table></figure></p>
+<h3 id="關閉-swap"><a href="#關閉-swap" class="headerlink" title="關閉 swap"></a>關閉 swap</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ swapoff -a</span><br><span class="line">$ echo &quot;vm.swappiness=0&quot; &gt;&gt; /etc/sysctl.d/k8s.conf</span><br><span class="line">$ sysctl --system</span><br></pre></td></tr></table></figure>
+<h3 id="安裝-docker-17-03-2-ce"><a href="#安裝-docker-17-03-2-ce" class="headerlink" title="安裝 docker 17.03.2.ce"></a>安裝 docker 17.03.2.ce</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ yum remove docker docker-common docker-selinux docker-engine</span><br><span class="line">$ yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">$ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">$ yum install -y --setopt=obsoletes=0 docker-ce-17.03.2.ce-1.el7.centos docker-ce-selinux-17.03.2.ce-1.el7.centos</span><br><span class="line">$ iptables -P FORWARD ACCEPT</span><br><span class="line">$ systemctl enable docker &amp;&amp; systemctl start docker</span><br></pre></td></tr></table></figure>
+<h3 id="安裝-kubelet-kubeadm-kubectl-1-9-1"><a href="#安裝-kubelet-kubeadm-kubectl-1-9-1" class="headerlink" title="安裝 kubelet, kubeadm, kubectl 1.9.1"></a>安裝 kubelet, kubeadm, kubectl 1.9.1</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ cat &lt;&lt;EOF &gt; /tmp/kubernetes.repo </span><br><span class="line">[kubernetes] </span><br><span class="line">name=Kubernetes </span><br><span class="line">baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch </span><br><span class="line">enabled=1 </span><br><span class="line">gpgcheck=1 </span><br><span class="line">repo_gpgcheck=1 </span><br><span class="line">gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg </span><br><span class="line">EOF</span><br><span class="line">$ mv /tmp/kubernetes.repo /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">$ yum install -y kubelet-1.9.1 kubeadm-1.9.1 kubectl-1.9.1</span><br></pre></td></tr></table></figure>
+<p>這裡要把 kubeadm 預設用的 cgroup driver 改成跟 dockerd 用的 cgroupfs 一樣<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sed -i &quot;s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g&quot; /etc/systemd/system/kubelet.service.d/10-kubeadm.conf</span><br><span class="line">$ systemctl daemon-reload &amp;&amp; systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br></pre></td></tr></table></figure></p>
+<h3 id="關閉-selinux-再重啟-EC2-instance"><a href="#關閉-selinux-再重啟-EC2-instance" class="headerlink" title="關閉 selinux 再重啟 EC2 instance"></a>關閉 selinux 再重啟 EC2 instance</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config</span><br><span class="line">sed -i &apos;s/SELINUX=permissive/SELINUX=disabled/g&apos; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="STEP-2-建立-ETCD-cluster"><a href="#STEP-2-建立-ETCD-cluster" class="headerlink" title="STEP 2: 建立 ETCD cluster"></a>STEP 2: 建立 ETCD cluster</h2><p>這部分比較繁瑣，另外開一篇解釋</p>
+<hr>
+<h2 id="STEP-3-建立第一台-master"><a href="#STEP-3-建立第一台-master" class="headerlink" title="STEP 3: 建立第一台 master"></a>STEP 3: 建立第一台 master</h2><p>首先，我們要先產生 kubeadm 所需的 token，寫在 config.yaml 裡<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubeadm token generate</span><br><span class="line">6fd455.dd6fb4fa31f47c93</span><br></pre></td></tr></table></figure></p>
+<p>config.yaml 會長得像這樣<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: kubeadm.k8s.io/v1alpha1</span><br><span class="line">kind: MasterConfiguration</span><br><span class="line">token: &quot;6fd455.dd6fb4fa31f47c93&quot;</span><br><span class="line">tokenTTL: &quot;0&quot;</span><br><span class="line">etcd:</span><br><span class="line">  endpoints:</span><br><span class="line">  - https://IP_OF_K8S_M0:2379</span><br><span class="line">  - https://IP_OF_K8S_M1:2379</span><br><span class="line">  - https://IP_OF_K8S_M2:2379</span><br><span class="line">  caFile: /etc/etcd/ssl/ca.pem</span><br><span class="line">  certFile: /etc/etcd/ssl/client.pem</span><br><span class="line">  keyFile: /etc/etcd/ssl/client-key.pem</span><br><span class="line">networking:</span><br><span class="line">  podSubnet: 10.244.0.0/16</span><br><span class="line">kubernetesVersion: 1.9.1</span><br><span class="line">apiServerCertSANs:</span><br><span class="line">- 127.0.0.1</span><br><span class="line">- IP_OF_K8S_M0</span><br><span class="line">- IP_OF_K8S_M1</span><br><span class="line">- IP_OF_K8S_M2</span><br><span class="line">- HOSTNAME_OF_K8S_M0</span><br><span class="line">- HOSTNAME_OF_K8S_M1</span><br><span class="line">- HOSTNAME_OF_K8S_M2</span><br><span class="line">- AWS_ELB_DNS_NAME_FOR_MASTER_NODES</span><br><span class="line">apiServerExtraArgs:</span><br><span class="line">  endpoint-reconciler-type: lease</span><br></pre></td></tr></table></figure></p>
+<p>寫好 config.yaml 之後，scp 到三個 masters 的 /etc/kubernetes/</p>
+<p>其中 podSubnet 如果跟我一樣用的是 flannel 的 CNI plugin ，就必須填得一樣，這邊要特別注意的是 AWS_ELB_DNS_NAME_FOR_MASTER_NODES 必須是全部小寫，而且可以是 internal 的 ELB，要嘛就在給 ELB 取名時全部小寫，要嘛就用 route53 給一個小寫的名字，當 etcd cluster healthy、config.yaml 寫好，dependency 裝好，就可以來起第一台的 master<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh k8s-m0 &quot;sudo kubeadm init --config=/etc/kubernetes/config.yaml&quot;</span><br></pre></td></tr></table></figure></p>
+<p>跑了一堆訊息後，如果成功之後會給類似下面的訊息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Your Kubernetes master has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p $HOME/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">You can now join any number of machines by running the following on each node</span><br><span class="line">as root:</span><br><span class="line"></span><br><span class="line">  kubeadm join --token 6fd455.dd6fb4fa31f47c93 IP_OF_K8S_M0:6443 --discovery-token-ca-cert-hash sha256:SOME_VERY_LONG_HASH</span><br></pre></td></tr></table></figure></p>
+<p>kubeadm join 這串很重要，要記下來。這個時候，可以去 AWS dashboard 確認給 masters 用的 ELB 是否設置完成，health check 有沒有過，然後可以把 k8s-m0 上的 /etc/kubernetes/admin.conf scp 到 jumpy 上的 ~/.kube/config ，再把 config 裡面 k8s-m0 的 IP 換成 ELB 的 dns name，這樣就可以在 jumpy 上使用 kubectl 操控整個 Kubernetes cluster，kubectl 設置好可以測試一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get po --all-namespaces</span><br></pre></td></tr></table></figure>
+<p>這個時候也可以順便 apply 一下 Kubernets 要用的 network plugin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure></p>
+<p>建議 apply 之後，再 get all pods 看一下 flannel 和 kube-dns 有沒有正常跑起來，如果有，恭喜！</p>
+<hr>
+<h2 id="STEP-4：建立其他台-master"><a href="#STEP-4：建立其他台-master" class="headerlink" title="STEP 4：建立其他台 master"></a>STEP 4：建立其他台 master</h2><p>剛剛建立第一台 master 的 config.yaml 應該也 scp 到剩下兩台 masters 了，然後我們在 jumpy 上的 kubectl 應該也設好了，flannel 也健康地跑起來了，之所以要先跑第一台 master ，就要要將 kube-api 的 key sync 到其他兩台，請自行將下面四個檔案 scp 從 k8s-m0 到 k8s-m1、k8s-m2 的同樣位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/etc/kubernetes/pki/ca.crt</span><br><span class="line">/etc/kubernetes/pki/ca.key</span><br><span class="line">/etc/kubernetes/pki/sa.key</span><br><span class="line">/etc/kubernetes/pki/sa.pub</span><br></pre></td></tr></table></figure>
+<p>包含<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/kubernets/config.yaml</span><br></pre></td></tr></table></figure></p>
+<p>3個 masters 應該有五個檔案要一致，這時候再對剩下兩台 masters 執行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh k8s-m1 &quot;sudo kubeadm init --config=/etc/kubernetes/config.yaml&quot;</span><br><span class="line">$ ssh k8s-m2 &quot;sudo kubeadm init --config=/etc/kubernetes/config.yaml&quot;</span><br></pre></td></tr></table></figure></p>
+<p>回頭檢查一下</p>
+<ul>
+<li>ELB 對 3 個 mastes 的 health check</li>
+<li>所有 pods 尤其是 kube-dns 和 flannel 是不是正常</li>
+</ul>
+<hr>
+<h2 id="STEP-5-加入-nodes"><a href="#STEP-5-加入-nodes" class="headerlink" title="STEP 5: 加入 nodes"></a>STEP 5: 加入 nodes</h2><p>應該還記得剛剛說要把 kubeadm join 記下來吧，加入 nodes 就非常 trivial 了，直接在每一個要加入負載的 nodes 上執行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo kubeadm join --token 6fd455.dd6fb4fa31f47c93 IP_OF_K8S_M0:6443 --discovery-token-ca-cert-hash sha256:SOME_VERY_LONG_HASH</span><br></pre></td></tr></table></figure></p>
+<p>以上，即使是半自動的建立 Kubernetes 還是相當麻煩的，希望大家都建立成功</p>
 
       
     </div>
@@ -629,7 +686,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#預備知識"><span class="nav-number">1.</span> <span class="nav-text">預備知識</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Component-Version"><span class="nav-number">2.</span> <span class="nav-text">Component Version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-AWS-Environment"><span class="nav-number">3.</span> <span class="nav-text">Create AWS Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kubeadm-minimum-requirements"><span class="nav-number">4.</span> <span class="nav-text">kubeadm minimum requirements</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#預備知識"><span class="nav-number">1.</span> <span class="nav-text">預備知識</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Component-Version"><span class="nav-number">2.</span> <span class="nav-text">Component Version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-AWS-Environment"><span class="nav-number">3.</span> <span class="nav-text">Create AWS Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP1-kubeadm-minimum-requirements"><span class="nav-number">4.</span> <span class="nav-text">STEP1: kubeadm minimum requirements</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#network"><span class="nav-number">4.1.</span> <span class="nav-text">network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關閉-swap"><span class="nav-number">4.2.</span> <span class="nav-text">關閉 swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安裝-docker-17-03-2-ce"><span class="nav-number">4.3.</span> <span class="nav-text">安裝 docker 17.03.2.ce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安裝-kubelet-kubeadm-kubectl-1-9-1"><span class="nav-number">4.4.</span> <span class="nav-text">安裝 kubelet, kubeadm, kubectl 1.9.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#關閉-selinux-再重啟-EC2-instance"><span class="nav-number">4.5.</span> <span class="nav-text">關閉 selinux 再重啟 EC2 instance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-2-建立-ETCD-cluster"><span class="nav-number">5.</span> <span class="nav-text">STEP 2: 建立 ETCD cluster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-3-建立第一台-master"><span class="nav-number">6.</span> <span class="nav-text">STEP 3: 建立第一台 master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-4：建立其他台-master"><span class="nav-number">7.</span> <span class="nav-text">STEP 4：建立其他台 master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STEP-5-加入-nodes"><span class="nav-number">8.</span> <span class="nav-text">STEP 5: 加入 nodes</span></a></li></ol></div>
             
 
           </div>
