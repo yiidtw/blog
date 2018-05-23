@@ -102,25 +102,27 @@
 
 
 
-  <meta name="description" content="今天工作的時候，因為 unzip 有個我想要的 flag 沒有提供，於是就想改個 source code 測試一下，順便學了怎麼上 RPM 的 patch，以下的範例是去修改 unzip 的 warning-error 的 return code ，我希望忽略 warning-error，也就是雖然會寫 warning-error 的 message ，但 return code 是 0，達到忽略">
-<meta name="keywords" content="RPM,SRPM,unzip">
+  <meta name="description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 如果 shell 的 auto complet">
+<meta name="keywords" content="Golang,Mac book">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何修改 RPM build，以 unzip 套件為例">
-<meta property="og:url" content="http://yiidtw.github.io/blog/2018-05-23-how-to-modify-RPM-build/index.html">
+<meta property="og:title" content="在 Mac book 上設置 Golang 的開發環境">
+<meta property="og:url" content="http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/index.html">
 <meta property="og:site_name" content="YIIDTW">
-<meta property="og:description" content="今天工作的時候，因為 unzip 有個我想要的 flag 沒有提供，於是就想改個 source code 測試一下，順便學了怎麼上 RPM 的 patch，以下的範例是去修改 unzip 的 warning-error 的 return code ，我希望忽略 warning-error，也就是雖然會寫 warning-error 的 message ，但 return code 是 0，達到忽略">
+<meta property="og:description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 如果 shell 的 auto complet">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-05-23T06:43:29.000Z">
+<meta property="og:image" content="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e">
+<meta property="og:updated_time" content="2018-05-23T07:35:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何修改 RPM build，以 unzip 套件為例">
-<meta name="twitter:description" content="今天工作的時候，因為 unzip 有個我想要的 flag 沒有提供，於是就想改個 source code 測試一下，順便學了怎麼上 RPM 的 patch，以下的範例是去修改 unzip 的 warning-error 的 return code ，我希望忽略 warning-error，也就是雖然會寫 warning-error 的 message ，但 return code 是 0，達到忽略">
+<meta name="twitter:title" content="在 Mac book 上設置 Golang 的開發環境">
+<meta name="twitter:description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 如果 shell 的 auto complet">
+<meta name="twitter:image" content="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-05-23-how-to-modify-RPM-build/"/>
+  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/"/>
 
 
 
@@ -130,7 +132,7 @@
   };
 </script>
 
-  <title>如何修改 RPM build，以 unzip 套件為例 | YIIDTW</title>
+  <title>在 Mac book 上設置 Golang 的開發環境 | YIIDTW</title>
   
 
 
@@ -278,7 +280,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-05-23-how-to-modify-RPM-build/">
+    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yiidtw">
@@ -295,7 +297,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">如何修改 RPM build，以 unzip 套件為例
+          <h1 class="post-title" itemprop="name headline">在 Mac book 上設置 Golang 的開發環境
               
             
           </h1>
@@ -320,7 +322,7 @@
                 
               
 
-              <time title="Created: 2018-05-23 14:40:45 / Modified: 14:43:29" itemprop="dateCreated datePublished" datetime="2018-05-23T14:40:45+08:00">2018-05-23</time>
+              <time title="Created: 2018-05-23 15:31:52 / Modified: 15:35:07" itemprop="dateCreated datePublished" datetime="2018-05-23T15:31:52+08:00">2018-05-23</time>
             
 
             
@@ -339,9 +341,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2018-05-23-how-to-modify-RPM-build/#comments" itemprop="discussionUrl">
+                <a href="/blog/2018-05-23-golang-dev-setup/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018-05-23-how-to-modify-RPM-build/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018-05-23-golang-dev-setup/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -349,7 +351,7 @@
 
           
           
-             <span id="/blog/2018-05-23-how-to-modify-RPM-build/" class="leancloud_visitors" data-flag-title="如何修改 RPM build，以 unzip 套件為例">
+             <span id="/blog/2018-05-23-golang-dev-setup/" class="leancloud_visitors" data-flag-title="在 Mac book 上設置 Golang 的開發環境">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -380,45 +382,47 @@
       
 
       
-        <p>今天工作的時候，因為 unzip 有個我想要的 flag 沒有提供，於是就想改個 source code 測試一下，順便學了怎麼上 RPM 的 patch，以下的範例是去修改 unzip 的 warning-error 的 return code ，我希望忽略 warning-error，也就是雖然會寫 warning-error 的 message ，但 return code 是 0，達到忽略 warning 的效果，但其他 error 仍然保留 </p>
-<h2 id="應用場景"><a href="#應用場景" class="headerlink" title="應用場景"></a>應用場景</h2><p>常常在 CentOS 上工作，常常壓 yum 的指令，其實這些包可以透過 yumdownloader 下載源碼，修改上 patch ，再重包，重包完可依需求、licence 送到自己團隊的 yum 源、或是打完補釘貢獻回社區，以下範例雖然以開源的 unzip 套件為範例，可自行替換成其他的 yum package</p>
-<h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils rpm-build</span><br></pre></td></tr></table></figure>
-<p>確定一下要用的套件名稱，不確的定的話用關鍵字找一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum --showduplicates list unzip</span><br></pre></td></tr></table></figure></p>
-<p>然後裝個 dependencies<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum-builddep -y unzip</span><br></pre></td></tr></table></figure></p>
-<p>如果已經裝過該套件，通常會裝 dependencies ，因為我們要改的是 unzip 這個套件，希望只移除 unzip ，不要砍掉 dependencies ，可以這麼做：先找到已安裝套件精確的套件名，然後再刪掉 + –nodeps 的 flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ rpm -qa | grep unzip</span><br><span class="line">unzip-6.0-19.el7.centos.x86_64</span><br><span class="line"></span><br><span class="line">$ sudo rpm -e --nodeps &quot;unzip-6.0-19.el7.x86_64&quot;</span><br></pre></td></tr></table></figure></p>
-<h2 id="下載並安裝源碼"><a href="#下載並安裝源碼" class="headerlink" title="下載並安裝源碼"></a>下載並安裝源碼</h2><p>有關 RPM、SRPM、YUM 的關係，可以參考<a href="http://linux.vbird.org/linux_basic/0520rpm_and_srpm.php" target="_blank" rel="noopener">鳥哥的 Linux 私房菜 – 第二十二章、軟體安裝 RPM, SRPM 與 YUM</a>，總之，可以知道我們要的是 SRPM，也就 suffix 是 src.rpm 的檔案，剛剛有裝 yum-utils ，應該就有 yumdownloader 了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yumdownloader --source unzip</span><br></pre></td></tr></table></figure></p>
-<p>會自動在家目錄下拉取 latest 的 unzip src.rpm，目前為止我都是在有 sudoer 權限的一般用戶身份下執行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls ~/ | grep unzip</span><br><span class="line">unzip-6.0-19.el7.src.rpm</span><br></pre></td></tr></table></figure></p>
-<p>安裝 src.rpm ，會在家目錄底下出現 ~/rpmbuild 這個 dir<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rpm -ivh unzip-6.0-19.el7.src.rpm</span><br></pre></td></tr></table></figure></p>
-<h2 id="編譯源碼"><a href="#編譯源碼" class="headerlink" title="編譯源碼"></a>編譯源碼</h2><p>這時候 ~/rpmbuild 下應該只有 SOURCE 和 SPECS ，我們需要從頭編一次<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/rpmbuild</span><br><span class="line">$ rpmbuild -ba ./SPECS/unzip.spec</span><br></pre></td></tr></table></figure></p>
-<p>然後就會多出 BUILD  BUILDROOT  RPMS  SRPMS 這幾個目錄</p>
+        <p>最近要來用 Golang 開發一些東西了，先寫個 setup</p>
+<h2 id="跟-Golang-有關的重要環境變量"><a href="#跟-Golang-有關的重要環境變量" class="headerlink" title="跟 Golang 有關的重要環境變量"></a>跟 Golang 有關的重要環境變量</h2><h3 id="GOROOT"><a href="#GOROOT" class="headerlink" title="GOROOT"></a>GOROOT</h3><p><img src="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e" alt=""><br><a href="https://www.quora.com/What-was-the-significance-of-Groot-saying-We-are-Groot-near-the-end-of-the-movie-when-all-through-he-is-only-capable-of-saying-I-am-Groot" target="_blank" rel="noopener">Photo from Quora</a> I’m <del>GOROOT</del> GROOT</p>
 <ul>
-<li>BUILD: 放 source code</li>
-<li>BUILDROOT: 空的</li>
-<li>RPMS: 放編好的 rpm</li>
-<li>SRPMS: 放 src.rpm</li>
-<li>SOURCES: 放各種 patch ，基本上就是每次新增 diff 的部分</li>
-<li>SPECS:  編 rpm 所需要的各種設定</li>
+<li>GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改</li>
+<li>如果 shell 的 auto complete 抓不到 go ，例如我某台 mac 上用 zsh ，那可以在 .bash_profile 新增 alias go=”/usr/local/go/bin/go”，記得 source ~/.bash_profile</li>
 </ul>
-<h2 id="修改源碼與上-patch"><a href="#修改源碼與上-patch" class="headerlink" title="修改源碼與上 patch"></a>修改源碼與上 patch</h2><p>剛剛說到 ~/rpmbuild/BUILD 下面會有 source code ，unzip 套件的 source code 放在 ~/rpmbuild/BUILD/unzip60，由於上 patch 的時候會需要提供新、舊 code 的 diff ，所以我直接 <code>$ cp -r unzip60 unzip60.new</code> ，然後在 .new 做完修改，再將 diff 的結果 redirect 到 SOURCES dir 底下。(我要改的 code 只有一行，就是 unzip.h 的 PK_WARN 由 1 改成 0)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ ls BUILD</span><br><span class="line">unzip60  unzip60.new</span><br><span class="line"></span><br><span class="line">$ diff -uNr ./BUILD/unzip60 ./BUILD/unzip60.new &gt; ./SOURCE/unzip-6.0-pk_warn.patch  </span><br><span class="line">// patch name 的 unzip-6.0- 跟著大版號，pk_warn 自己取的</span><br><span class="line"></span><br><span class="line">$ cat ./SOURCE/unzip-6.0-pk_warn.patch</span><br><span class="line">--- unzip60/unzip.h	2009-02-16 02:12:54.000000000 +0800</span><br><span class="line">+++ unzip60.new/unzip.h	2018-05-22 19:30:27.489247715 +0800</span><br><span class="line">@@ -634,7 +634,7 @@</span><br><span class="line"> /* external return codes */</span><br><span class="line"> #define PK_OK              0   /* no error */</span><br><span class="line"> #define PK_COOL            0   /* no error */</span><br><span class="line">-#define PK_WARN            1   /* warning error */</span><br><span class="line">+#define PK_WARN            0   /* warning error, 1-&gt;0 in order to ignore warning */</span><br><span class="line"> #define PK_ERR             2   /* error in zipfile */</span><br><span class="line"> #define PK_BADERR          3   /* severe error in zipfile */</span><br><span class="line"> #define PK_MEM             4   /* insufficient memory (during initialization) */</span><br></pre></td></tr></table></figure>
-<p>用 diff 的方式我們已經製作好 patch ，接下來就要修改 spec 然後重編</p>
-<h2 id="修改-spec-並重編"><a href="#修改-spec-並重編" class="headerlink" title="修改 spec 並重編"></a>修改 spec 並重編</h2><p>spec 的位置在 ./SPECS/unzip.spec ，修改前可能會想要備份舊的，新的 spec 直接看完整的範例在這 <a href="https://gist.github.com/yiidtw/bacbe4d1f6acaf3d789914087620dbff" target="_blank" rel="noopener">unzip.spec example for writing RPM building tutorial</a>，我修改了四個部分</p>
-<ul>
-<li>第 4 行，改小版號</li>
-<li>第 37 行，指明 patch name 與新增 patch 流水號</li>
-<li>第 79 行，增加這行，source code 裡被改到的檔案，會保留舊版本的一份並在原檔名加上這邊給的 suffix ，例如這邊 source code 就會多一個 unzip.h.pk_warn 的檔案，而原來的 unzip.h 則會在重編後被更新，所以如果等一下重編成功，可以把 .new 的那份 repo 砍掉</li>
-<li>第 102-103 行，給 changelog</li>
+<h3 id="GOPATH-最重要"><a href="#GOPATH-最重要" class="headerlink" title="GOPATH (最重要)"></a>GOPATH (最重要)</h3><ul>
+<li>預設在 $HOME/go ，若客製化需要可更改</li>
+<li>通常會有三個 dir ，分別是 src、pkg、bin ，我們只需要手動創建 src ，像是 <code>$ mkdir -p $HOME/go/src</code> ，其他兩個會在 go install 有需要時自動創建</li>
 </ul>
-<p>修改得其實不多，我們來編編看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rpmbuild -ba ./SPECS/unzip.spec</span><br></pre></td></tr></table></figure></p>
-<p>一切順利的話，會在 RPMS 下看到新編出來的 rpm<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls RPMS/x86_64/</span><br><span class="line">unzip-6.0-20.el7.centos.x86_64.rpm  unzip-debuginfo-6.0-20.el7.centos.x86_64.rpm</span><br></pre></td></tr></table></figure></p>
-<h2 id="安裝與測試"><a href="#安裝與測試" class="headerlink" title="安裝與測試"></a>安裝與測試</h2><p>我們可以直接用 rpm 的指令來安裝與移除我們 customized 的 rpm<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rpm -ivh ./RPMS/x86_64/unzip-6.0-20.el7.centos.x86_64.rpm  // 安裝</span><br><span class="line">$ sudo rpm -e --nodeps unzip-6.0-20.el7.centos.x86_64.rpm         // 移除</span><br></pre></td></tr></table></figure></p>
-<p>至於測試的方法，先看版本號<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ unzip -v</span><br><span class="line">UnZip 6.00 of 20 April 2009, by Info-ZIP.  Maintained by C. Spieler.  Send</span><br><span class="line">bug reports using http://www.info-zip.org/zip-bug.html; see README for details.</span><br></pre></td></tr></table></figure></p>
-<p>然後拿新版本的 unzip 去解壓縮檔案，然後可以用 <code>$ echo $?</code> 的指令看 return code ，是否有忽略 warning-error 就大功告成啦</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="https://blog.csdn.net/qq_26437925/article/details/73691983" target="_blank" rel="noopener">Centos环境下 helloworld rpm的制作,安装,卸载 - CSDN博客</a></li>
-<li><a href="https://blog.csdn.net/qq_26437925/article/details/73864258" target="_blank" rel="noopener">Centos下 rpm 打补丁，patch - CSDN博客</a></li>
-<li><a href="https://www.phpini.com/linux/rpm-install-update-remove-package" target="_blank" rel="noopener">RPM 安裝/更新/移除套件指令 – Linux 技術手札</a></li>
-<li><a href="https://access.redhat.com/solutions/10154" target="_blank" rel="noopener">How to use yum to download a package without installing it</a></li>
+<h3 id="GOBIN"><a href="#GOBIN" class="headerlink" title="GOBIN"></a>GOBIN</h3><ul>
+<li>基本上不設，可為空，若客製化需要可更改</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li>可用 <code>$ go env</code> 查看 golang 用到相關的環境變數</li>
+<li>project 要用到的版本管理 a.k.a. git ，應該在 src 下，一個 project 一個 dir，詳見下段工程目錄結構</li>
+</ul>
+<hr>
+<h2 id="工程目錄結構"><a href="#工程目錄結構" class="headerlink" title="工程目錄結構"></a>工程目錄結構</h2><ul>
+<li>上面說過我們需要手動創建的 dir 只有 src ，不過本篇範例還不會用到 go get ，所以 ./pkg 還不會被創建出來，為了先 demo ，我們這邊手動 mkdir 了</li>
+<li>這邊有兩個專案，分別是 hello 和 foo ，各自都有 main function</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ tree ~/go</span><br><span class="line"></span><br><span class="line">.</span><br><span class="line">├── bin</span><br><span class="line">│   ├── foo</span><br><span class="line">│   └── hello</span><br><span class="line">├── pkg</span><br><span class="line">└── src</span><br><span class="line">    ├── foo</span><br><span class="line">    │   └── foo.go</span><br><span class="line">    └── hello</span><br><span class="line">        └── hello.go</span><br></pre></td></tr></table></figure>
+<p>至於 hello.go 程式本身很簡單，就是印 hello, world 而已<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~/go/src/hello/hello.go </span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">	fmt.Printf(&quot;hello, world\n&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="編譯方法"><a href="#編譯方法" class="headerlink" title="編譯方法"></a>編譯方法</h2><h3 id="推薦用這個"><a href="#推薦用這個" class="headerlink" title="推薦用這個"></a>推薦用這個</h3><ul>
+<li>go install: 把 可執行檔放在 $GOPATH 下的 /bin，如果沒有會建對應的目錄<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go install</span><br><span class="line"></span><br><span class="line">$ ls ../../bin</span><br><span class="line">hello</span><br><span class="line"></span><br><span class="line">$ ../../bin/hello </span><br><span class="line">hello, world</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="其他可用"><a href="#其他可用" class="headerlink" title="其他可用"></a>其他可用</h3><ul>
+<li><p>go build: 直接在 .go 所在的 dir 編出可執行檔</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go build</span><br><span class="line"></span><br><span class="line">$ ls</span><br><span class="line">hello		hello.go</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>go run: 忽略編譯過程，直接跑出結果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go run hello.go</span><br><span class="line">hello, world!!</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h2><ul>
+<li><a href="https://golang.org/doc/install" target="_blank" rel="noopener">golang.org - Getting Started</a> </li>
+<li><a href="https://www.cnblogs.com/zhaof/p/7906722.html" target="_blank" rel="noopener">初学者没有搞明白的GOROOT,GOPATH,GOBIN,project目录 - python修行路 - 博客园</a></li>
 </ul>
 
       
@@ -440,11 +444,9 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/RPM/" rel="tag"># RPM</a>
+            <a href="/blog/tags/Golang/" rel="tag"># Golang</a>
           
-            <a href="/blog/tags/SRPM/" rel="tag"># SRPM</a>
-          
-            <a href="/blog/tags/unzip/" rel="tag"># unzip</a>
+            <a href="/blog/tags/Mac-book/" rel="tag"># Mac book</a>
           
         </div>
       
@@ -457,8 +459,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/" rel="next" title="使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster">
-                <i class="fa fa-chevron-left"></i> 使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster
+              <a href="/blog/2018-05-23-how-to-modify-RPM-build/" rel="next" title="如何修改 RPM build，以 unzip 套件為例">
+                <i class="fa fa-chevron-left"></i> 如何修改 RPM build，以 unzip 套件為例
               </a>
             
           </div>
@@ -466,10 +468,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018-05-23-golang-dev-setup/" rel="prev" title="在 Mac book 上設置 Golang 的開發環境">
-                在 Mac book 上設置 Golang 的開發環境 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -634,7 +632,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#應用場景"><span class="nav-number">1.</span> <span class="nav-text">應用場景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prerequisite"><span class="nav-number">2.</span> <span class="nav-text">Prerequisite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下載並安裝源碼"><span class="nav-number">3.</span> <span class="nav-text">下載並安裝源碼</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#編譯源碼"><span class="nav-number">4.</span> <span class="nav-text">編譯源碼</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改源碼與上-patch"><span class="nav-number">5.</span> <span class="nav-text">修改源碼與上 patch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改-spec-並重編"><span class="nav-number">6.</span> <span class="nav-text">修改 spec 並重編</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安裝與測試"><span class="nav-number">7.</span> <span class="nav-text">安裝與測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#跟-Golang-有關的重要環境變量"><span class="nav-number">1.</span> <span class="nav-text">跟 Golang 有關的重要環境變量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GOROOT"><span class="nav-number">1.1.</span> <span class="nav-text">GOROOT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GOPATH-最重要"><span class="nav-number">1.2.</span> <span class="nav-text">GOPATH (最重要)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GOBIN"><span class="nav-number">1.3.</span> <span class="nav-text">GOBIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程目錄結構"><span class="nav-number">2.</span> <span class="nav-text">工程目錄結構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#編譯方法"><span class="nav-number">3.</span> <span class="nav-text">編譯方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推薦用這個"><span class="nav-number">3.1.</span> <span class="nav-text">推薦用這個</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他可用"><span class="nav-number">3.2.</span> <span class="nav-text">其他可用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference:</span></a></li></ol></div>
             
 
           </div>
@@ -788,9 +786,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://yiidtw.github.io/blog/2018-05-23-how-to-modify-RPM-build/';
-        this.page.identifier = '2018-05-23-how-to-modify-RPM-build/';
-        this.page.title = '如何修改 RPM build，以 unzip 套件為例';
+        this.page.url = 'http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/';
+        this.page.identifier = '2018-05-23-golang-dev-setup/';
+        this.page.title = '在 Mac book 上設置 Golang 的開發環境';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
