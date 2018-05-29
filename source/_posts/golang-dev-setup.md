@@ -51,6 +51,8 @@ $ sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
 $ source ~/.bash_profile
 ```
 
+可以用 `$ go env`，或 `$ go version` 測試一下安裝成果
+
 
 ---
 
