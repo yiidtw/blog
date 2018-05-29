@@ -38,7 +38,7 @@ date: 2018-05-23 15:31:52
 - 這邊有兩個專案，分別是 hello 和 foo ，各自都有 main function
 
 ```
-$ tree ~/go
+$ tree ~/go -a
 
 .
 ├── bin
@@ -47,8 +47,10 @@ $ tree ~/go
 ├── pkg
 └── src
     ├── foo
+    │   ├── .git
     │   └── foo.go
     └── hello
+        ├── .git
         └── hello.go
 ```
 
@@ -105,3 +107,4 @@ hello, world!!
 ## Reference:
 - [golang.org - Getting Started](https://golang.org/doc/install) 
 - [初学者没有搞明白的GOROOT,GOPATH,GOBIN,project目录 - python修行路 - 博客园](https://www.cnblogs.com/zhaof/p/7906722.html)
+- [关于GOROOT、GOPATH、GOBIN、project目录 - CSDN博客](https://blog.csdn.net/Alsmile/article/details/48290223)
