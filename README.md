@@ -1,4 +1,7 @@
 
+# yiidtw's blog
+- [link](https://yiidtw.github.io/blog)
+
 ## Overview
 - this repo contains the source (.md) and hexo generated documents (.css .html .js)
 - the following command are for myself to deploy blog writing environment on different machines

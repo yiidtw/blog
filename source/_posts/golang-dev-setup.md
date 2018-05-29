@@ -1,8 +1,9 @@
 ---
-title: 在 Mac book 上設置 Golang 的開發環境
+title: 在 Mac book / Centos 7 上設置 Golang 的開發環境
 tags:
   - Golang
   - Mac book
+  - centos 7
 date: 2018-05-23 15:31:52
 ---
 
@@ -17,11 +18,14 @@ date: 2018-05-23 15:31:52
 [Photo from Quora](https://www.quora.com/What-was-the-significance-of-Groot-saying-We-are-Groot-near-the-end-of-the-movie-when-all-through-he-is-only-capable-of-saying-I-am-Groot) I'm ~~GOROOT~~ GROOT
 
 - GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改
-- 如果 shell 的 auto complete 抓不到 go ，例如我某台 mac 上用 zsh ，那可以在 .bash_profile 新增 alias go="/usr/local/go/bin/go"，記得 source ~/.bash_profile
+- 裝完記得修改 ~/.profile 或是 ~/.bash_profile，修改完要記得 source
+```
+export PATH=$PATH:/usr/local/go/bin
+```
 
 ### GOPATH (最重要)
 - 預設在 $HOME/go ，若客製化需要可更改
-- 通常會有三個 dir ，分別是 src、pkg、bin ，我們只需要手動創建 src ，像是 `$ mkdir -p $HOME/go/src` ，其他兩個會在 go install 有需要時自動創建
+- 通常會有三個 dir ，分別是 src、pkg、bin ，我們只需要手動創建 ~/go/src ，像是 `$ mkdir -p $HOME/go/src` ，其他兩個會在 go install 有需要時自動創建
 
 ### GOBIN
 - 基本上不設，可為空，若客製化需要可更改
@@ -29,6 +33,24 @@ date: 2018-05-23 15:31:52
 ### 其他
 - 可用 `$ go env` 查看 golang 用到相關的環境變數
 - project 要用到的版本管理 a.k.a. git ，應該在 src 下，一個 project 一個 dir，詳見下段工程目錄結構
+
+---
+
+## CentOS 7  上安裝 go 開發環境
+
+- 先去官方 source wget 最新的 tar 檔 [Downloads - The Go Programming Language](https://golang.org/dl/)
+- 解壓縮
+- 設置 Path
+```
+$ cd /tmp; wget https://dl.google.com/go/go1.10.2.linux-amd64.tar.gz
+$ sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
+```
+
+修改 ~/.bash_profile，export 後加上 `:/usr/local/go/bin`
+```
+$ source ~/.bash_profile
+```
+
 
 ---
 

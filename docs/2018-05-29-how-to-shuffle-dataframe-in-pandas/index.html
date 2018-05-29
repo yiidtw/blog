@@ -102,27 +102,25 @@
 
 
 
-  <meta name="description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 裝完記得修改 ~/.profile 或是 ~/">
-<meta name="keywords" content="Golang,Mac book,centos 7">
+  <meta name="description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦… 123456789# mlcc 裡的方法california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation">
+<meta name="keywords" content="pandas,dataframe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在 Mac book &#x2F; Centos 7 上設置 Golang 的開發環境">
-<meta property="og:url" content="http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/index.html">
+<meta property="og:title" content="how to suffle dataframe in pandas">
+<meta property="og:url" content="http://yiidtw.github.io/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/index.html">
 <meta property="og:site_name" content="YIIDTW">
-<meta property="og:description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 裝完記得修改 ~/.profile 或是 ~/">
+<meta property="og:description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦… 123456789# mlcc 裡的方法california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:image" content="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e">
-<meta property="og:updated_time" content="2018-05-29T06:44:52.000Z">
+<meta property="og:updated_time" content="2018-05-29T06:55:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在 Mac book &#x2F; Centos 7 上設置 Golang 的開發環境">
-<meta name="twitter:description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 裝完記得修改 ~/.profile 或是 ~/">
-<meta name="twitter:image" content="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e">
+<meta name="twitter:title" content="how to suffle dataframe in pandas">
+<meta name="twitter:description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦… 123456789# mlcc 裡的方法california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/"/>
+  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/"/>
 
 
 
@@ -132,7 +130,7 @@
   };
 </script>
 
-  <title>在 Mac book / Centos 7 上設置 Golang 的開發環境 | YIIDTW</title>
+  <title>how to suffle dataframe in pandas | YIIDTW</title>
   
 
 
@@ -280,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/">
+    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yiidtw">
@@ -297,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">在 Mac book / Centos 7 上設置 Golang 的開發環境
+          <h1 class="post-title" itemprop="name headline">how to suffle dataframe in pandas
               
             
           </h1>
@@ -322,24 +320,12 @@
                 
               
 
-              <time title="Created: 2018-05-23 15:31:52" itemprop="dateCreated datePublished" datetime="2018-05-23T15:31:52+08:00">2018-05-23</time>
+              <time title="Created: 2018-05-29 14:51:33 / Modified: 14:55:38" itemprop="dateCreated datePublished" datetime="2018-05-29T14:51:33+08:00">2018-05-29</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-05-29 14:44:52" itemprop="dateModified" datetime="2018-05-29T14:44:52+08:00">2018-05-29</time>
               
             
           </span>
@@ -353,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2018-05-23-golang-dev-setup/#comments" itemprop="discussionUrl">
+                <a href="/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018-05-23-golang-dev-setup/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018-05-29-how-to-shuffle-dataframe-in-pandas/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -363,7 +349,7 @@
 
           
           
-             <span id="/blog/2018-05-23-golang-dev-setup/" class="leancloud_visitors" data-flag-title="在 Mac book / Centos 7 上設置 Golang 的開發環境">
+             <span id="/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/" class="leancloud_visitors" data-flag-title="how to suffle dataframe in pandas">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -394,57 +380,11 @@
       
 
       
-        <p>最近要來用 Golang 開發一些東西了，先寫個 setup</p>
-<h2 id="跟-Golang-有關的重要環境變量"><a href="#跟-Golang-有關的重要環境變量" class="headerlink" title="跟 Golang 有關的重要環境變量"></a>跟 Golang 有關的重要環境變量</h2><h3 id="GOROOT"><a href="#GOROOT" class="headerlink" title="GOROOT"></a>GOROOT</h3><p><img src="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e" alt=""><br><a href="https://www.quora.com/What-was-the-significance-of-Groot-saying-We-are-Groot-near-the-end-of-the-movie-when-all-through-he-is-only-capable-of-saying-I-am-Groot" target="_blank" rel="noopener">Photo from Quora</a> I’m <del>GOROOT</del> GROOT</p>
-<ul>
-<li>GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改</li>
-<li>裝完記得修改 ~/.profile 或是 ~/.bash_profile，修改完要記得 source<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$PATH:/usr/local/go/bin</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="GOPATH-最重要"><a href="#GOPATH-最重要" class="headerlink" title="GOPATH (最重要)"></a>GOPATH (最重要)</h3><ul>
-<li>預設在 $HOME/go ，若客製化需要可更改</li>
-<li>通常會有三個 dir ，分別是 src、pkg、bin ，我們只需要手動創建 ~/go/src ，像是 <code>$ mkdir -p $HOME/go/src</code> ，其他兩個會在 go install 有需要時自動創建</li>
-</ul>
-<h3 id="GOBIN"><a href="#GOBIN" class="headerlink" title="GOBIN"></a>GOBIN</h3><ul>
-<li>基本上不設，可為空，若客製化需要可更改</li>
-</ul>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
-<li>可用 <code>$ go env</code> 查看 golang 用到相關的環境變數</li>
-<li>project 要用到的版本管理 a.k.a. git ，應該在 src 下，一個 project 一個 dir，詳見下段工程目錄結構</li>
-</ul>
+        <p>在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># mlcc 裡的方法</span><br><span class="line">california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation(california_housing_dataframe.index))</span><br><span class="line"></span><br><span class="line"># sample 法</span><br><span class="line">california_housing_dataframe = california_housing_dataframe.sample(frac=1).reset_index(drop=True)</span><br><span class="line"></span><br><span class="line"># sklearn shuffle 法</span><br><span class="line">from sklearn.utils import shuffle</span><br><span class="line">california_housing_dataframe = shuffle(california_housing_dataframe)</span><br></pre></td></tr></table></figure>
 <hr>
-<h2 id="CentOS-7-上安裝-go-開發環境"><a href="#CentOS-7-上安裝-go-開發環境" class="headerlink" title="CentOS 7  上安裝 go 開發環境"></a>CentOS 7  上安裝 go 開發環境</h2><ul>
-<li>先去官方 source wget 最新的 tar 檔 <a href="https://golang.org/dl/" target="_blank" rel="noopener">Downloads - The Go Programming Language</a></li>
-<li>解壓縮</li>
-<li>設置 Path<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /tmp; wget https://dl.google.com/go/go1.10.2.linux-amd64.tar.gz</span><br><span class="line">$ sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>修改 ~/.bash_profile，export 後加上 <code>:/usr/local/go/bin</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ source ~/.bash_profile</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h2 id="工程目錄結構"><a href="#工程目錄結構" class="headerlink" title="工程目錄結構"></a>工程目錄結構</h2><ul>
-<li>上面說過我們需要手動創建的 dir 只有 src ，不過本篇範例還不會用到 go get ，所以 ./pkg 還不會被創建出來，為了先 demo ，我們這邊手動 mkdir 了</li>
-<li>這邊有兩個專案，分別是 hello 和 foo ，各自都有 main function</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ tree ~/go -a</span><br><span class="line"></span><br><span class="line">.</span><br><span class="line">├── bin</span><br><span class="line">│   ├── foo</span><br><span class="line">│   └── hello</span><br><span class="line">├── pkg</span><br><span class="line">└── src</span><br><span class="line">    ├── foo</span><br><span class="line">    │   ├── .git</span><br><span class="line">    │   └── foo.go</span><br><span class="line">    └── hello</span><br><span class="line">        ├── .git</span><br><span class="line">        └── hello.go</span><br></pre></td></tr></table></figure>
-<p>至於 hello.go 程式本身很簡單，就是印 hello, world 而已<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~/go/src/hello/hello.go </span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">	fmt.Printf(&quot;hello, world\n&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h2 id="編譯方法"><a href="#編譯方法" class="headerlink" title="編譯方法"></a>編譯方法</h2><h3 id="推薦用這個"><a href="#推薦用這個" class="headerlink" title="推薦用這個"></a>推薦用這個</h3><ul>
-<li>go install: 把 可執行檔放在 $GOPATH 下的 /bin，如果沒有會建對應的目錄<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go install</span><br><span class="line"></span><br><span class="line">$ ls ../../bin</span><br><span class="line">hello</span><br><span class="line"></span><br><span class="line">$ ../../bin/hello </span><br><span class="line">hello, world</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="其他可用"><a href="#其他可用" class="headerlink" title="其他可用"></a>其他可用</h3><ul>
-<li><p>go build: 直接在 .go 所在的 dir 編出可執行檔</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go build</span><br><span class="line"></span><br><span class="line">$ ls</span><br><span class="line">hello		hello.go</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>go run: 忽略編譯過程，直接跑出結果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go run hello.go</span><br><span class="line">hello, world!!</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h2><ul>
-<li><a href="https://golang.org/doc/install" target="_blank" rel="noopener">golang.org - Getting Started</a> </li>
-<li><a href="https://www.cnblogs.com/zhaof/p/7906722.html" target="_blank" rel="noopener">初学者没有搞明白的GOROOT,GOPATH,GOBIN,project目录 - python修行路 - 博客园</a></li>
-<li><a href="https://blog.csdn.net/Alsmile/article/details/48290223" target="_blank" rel="noopener">关于GOROOT、GOPATH、GOBIN、project目录 - CSDN博客</a></li>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://stackoverflow.com/questions/29576430/shuffle-dataframe-rows?utm_medium=organic&amp;utm_source=google_rich_qa&amp;utm_campaign=google_rich_qa" target="_blank" rel="noopener">python - Shuffle DataFrame rows - Stack Overflow</a></li>
 </ul>
 
       
@@ -466,11 +406,9 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Golang/" rel="tag"># Golang</a>
+            <a href="/blog/tags/pandas/" rel="tag"># pandas</a>
           
-            <a href="/blog/tags/Mac-book/" rel="tag"># Mac book</a>
-          
-            <a href="/blog/tags/centos-7/" rel="tag"># centos 7</a>
+            <a href="/blog/tags/dataframe/" rel="tag"># dataframe</a>
           
         </div>
       
@@ -483,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018-05-23-how-to-modify-RPM-build/" rel="next" title="如何修改 RPM build，以 unzip 套件為例">
-                <i class="fa fa-chevron-left"></i> 如何修改 RPM build，以 unzip 套件為例
+              <a href="/blog/2018-05-23-golang-dev-setup/" rel="next" title="在 Mac book / Centos 7 上設置 Golang 的開發環境">
+                <i class="fa fa-chevron-left"></i> 在 Mac book / Centos 7 上設置 Golang 的開發環境
               </a>
             
           </div>
@@ -492,10 +430,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/" rel="prev" title="how to suffle dataframe in pandas">
-                how to suffle dataframe in pandas <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -666,7 +600,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#跟-Golang-有關的重要環境變量"><span class="nav-number">1.</span> <span class="nav-text">跟 Golang 有關的重要環境變量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GOROOT"><span class="nav-number">1.1.</span> <span class="nav-text">GOROOT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GOPATH-最重要"><span class="nav-number">1.2.</span> <span class="nav-text">GOPATH (最重要)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GOBIN"><span class="nav-number">1.3.</span> <span class="nav-text">GOBIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-7-上安裝-go-開發環境"><span class="nav-number">2.</span> <span class="nav-text">CentOS 7  上安裝 go 開發環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程目錄結構"><span class="nav-number">3.</span> <span class="nav-text">工程目錄結構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#編譯方法"><span class="nav-number">4.</span> <span class="nav-text">編譯方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推薦用這個"><span class="nav-number">4.1.</span> <span class="nav-text">推薦用這個</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他可用"><span class="nav-number">4.2.</span> <span class="nav-text">其他可用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -820,9 +754,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/';
-        this.page.identifier = '2018-05-23-golang-dev-setup/';
-        this.page.title = '在 Mac book / Centos 7 上設置 Golang 的開發環境';
+        this.page.url = 'http://yiidtw.github.io/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/';
+        this.page.identifier = '2018-05-29-how-to-shuffle-dataframe-in-pandas/';
+        this.page.title = 'how to suffle dataframe in pandas';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
