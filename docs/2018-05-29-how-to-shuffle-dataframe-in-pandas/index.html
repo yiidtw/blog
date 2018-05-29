@@ -102,18 +102,18 @@
 
 
 
-  <meta name="description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦… 123456789# mlcc 裡的方法california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation">
+  <meta name="description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦…以下要在 jupyter notebook 或 python script 裡執行， assume 已經安裝 pandas 並 import mlcc 裡的方法1&amp;gt; california_housing_dataf">
 <meta name="keywords" content="pandas,dataframe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="how to suffle dataframe in pandas">
+<meta property="og:title" content="Pandas Dataframe 隨機 shuffle 小技巧">
 <meta property="og:url" content="http://yiidtw.github.io/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/index.html">
 <meta property="og:site_name" content="YIIDTW">
-<meta property="og:description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦… 123456789# mlcc 裡的方法california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation">
+<meta property="og:description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦…以下要在 jupyter notebook 或 python script 裡執行， assume 已經安裝 pandas 並 import mlcc 裡的方法1&amp;gt; california_housing_dataf">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-05-29T06:55:38.000Z">
+<meta property="og:updated_time" content="2018-05-29T07:23:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="how to suffle dataframe in pandas">
-<meta name="twitter:description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦… 123456789# mlcc 裡的方法california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation">
+<meta name="twitter:title" content="Pandas Dataframe 隨機 shuffle 小技巧">
+<meta name="twitter:description" content="在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦…以下要在 jupyter notebook 或 python script 裡執行， assume 已經安裝 pandas 並 import mlcc 裡的方法1&amp;gt; california_housing_dataf">
 
 
 
@@ -130,7 +130,7 @@
   };
 </script>
 
-  <title>how to suffle dataframe in pandas | YIIDTW</title>
+  <title>Pandas Dataframe 隨機 shuffle 小技巧 | YIIDTW</title>
   
 
 
@@ -295,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">how to suffle dataframe in pandas
+          <h1 class="post-title" itemprop="name headline">Pandas Dataframe 隨機 shuffle 小技巧
               
             
           </h1>
@@ -320,7 +320,7 @@
                 
               
 
-              <time title="Created: 2018-05-29 14:51:33 / Modified: 14:55:38" itemprop="dateCreated datePublished" datetime="2018-05-29T14:51:33+08:00">2018-05-29</time>
+              <time title="Created: 2018-05-29 14:51:33 / Modified: 15:23:58" itemprop="dateCreated datePublished" datetime="2018-05-29T14:51:33+08:00">2018-05-29</time>
             
 
             
@@ -349,7 +349,7 @@
 
           
           
-             <span id="/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/" class="leancloud_visitors" data-flag-title="how to suffle dataframe in pandas">
+             <span id="/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/" class="leancloud_visitors" data-flag-title="Pandas Dataframe 隨機 shuffle 小技巧">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -380,8 +380,10 @@
       
 
       
-        <p>在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦…</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># mlcc 裡的方法</span><br><span class="line">california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation(california_housing_dataframe.index))</span><br><span class="line"></span><br><span class="line"># sample 法</span><br><span class="line">california_housing_dataframe = california_housing_dataframe.sample(frac=1).reset_index(drop=True)</span><br><span class="line"></span><br><span class="line"># sklearn shuffle 法</span><br><span class="line">from sklearn.utils import shuffle</span><br><span class="line">california_housing_dataframe = shuffle(california_housing_dataframe)</span><br></pre></td></tr></table></figure>
+        <p>在做 learning 的時候會需要先把 pandas 的 dataframe 的 order 打亂，有幾種方法可以做到，稍微紀錄一下，我個人是比較喜歡 sklearn 的方法啦…<br>以下要在 jupyter notebook 或 python script 裡執行， assume 已經安裝 pandas 並 import</p>
+<h3 id="mlcc-裡的方法"><a href="#mlcc-裡的方法" class="headerlink" title="mlcc 裡的方法"></a>mlcc 裡的方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; california_housing_dataframe = california_housing_dataframe.reindex(np.random.permutation(california_housing_dataframe.index))</span><br></pre></td></tr></table></figure>
+<h3 id="sample-法"><a href="#sample-法" class="headerlink" title="sample 法"></a>sample 法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; california_housing_dataframe = california_housing_dataframe.sample(frac=1).reset_index(drop=True)</span><br></pre></td></tr></table></figure>
+<h3 id="sklearn-shuffle-法"><a href="#sklearn-shuffle-法" class="headerlink" title="sklearn shuffle 法"></a>sklearn shuffle 法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; from sklearn.utils import shuffle</span><br><span class="line">&gt; california_housing_dataframe = shuffle(california_housing_dataframe)</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
 <li><a href="https://stackoverflow.com/questions/29576430/shuffle-dataframe-rows?utm_medium=organic&amp;utm_source=google_rich_qa&amp;utm_campaign=google_rich_qa" target="_blank" rel="noopener">python - Shuffle DataFrame rows - Stack Overflow</a></li>
@@ -600,7 +602,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mlcc-裡的方法"><span class="nav-number">1.</span> <span class="nav-text">mlcc 裡的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sample-法"><span class="nav-number">2.</span> <span class="nav-text">sample 法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sklearn-shuffle-法"><span class="nav-number">3.</span> <span class="nav-text">sklearn shuffle 法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number"></span> <span class="nav-text">Reference</span></a></div>
             
 
           </div>
@@ -756,7 +758,7 @@
       var disqus_config = function () {
         this.page.url = 'http://yiidtw.github.io/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/';
         this.page.identifier = '2018-05-29-how-to-shuffle-dataframe-in-pandas/';
-        this.page.title = 'how to suffle dataframe in pandas';
+        this.page.title = 'Pandas Dataframe 隨機 shuffle 小技巧';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
