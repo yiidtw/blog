@@ -102,24 +102,25 @@
 
 
 
-  <meta name="description" content="用 Hexo 重架了一次 blog ，有幾項舊站就想要修改的設定  URL 設定：/year-month-date-title 用同一個 repo 管理 source(.md) 和 redering result(.html) 由於 Next 主題在不同功能環境中會用 plugin 的方式安裝，於是 next 的 _config.yaml 會在一級目錄用 _config.yml.next.exam">
+  <meta name="description" content="思路jinja2 之前看別人是用在 Flask 的網頁模板，但在運維上也蠻實用的。例如今天的工作，需要在不同環境佈署 container ，映象檔(image)不動，可是 config 需要 mapping 到不同環境，這時候也可以使用模板，下面舉一個很簡單的栗子 考慮到 CentOS 7 預設還是給 python 2.7，所以這裡還是使用 python 2 作為運維語言， shell scrip">
+<meta name="keywords" content="Python2,DevOps,Jinja2,CentOS7">
 <meta property="og:type" content="article">
-<meta property="og:title" content="本站首Po">
-<meta property="og:url" content="http://yiidtw.github.io/blog/2018-04-22-hello-YIIDTW/index.html">
+<meta property="og:title" content="使用 Jinja2 in Python 進行模板替換">
+<meta property="og:url" content="http://yiidtw.github.io/blog/2018-06-05-how-to-use-jinja2-template-in-python/index.html">
 <meta property="og:site_name" content="YIIDTW">
-<meta property="og:description" content="用 Hexo 重架了一次 blog ，有幾項舊站就想要修改的設定  URL 設定：/year-month-date-title 用同一個 repo 管理 source(.md) 和 redering result(.html) 由於 Next 主題在不同功能環境中會用 plugin 的方式安裝，於是 next 的 _config.yaml 會在一級目錄用 _config.yml.next.exam">
+<meta property="og:description" content="思路jinja2 之前看別人是用在 Flask 的網頁模板，但在運維上也蠻實用的。例如今天的工作，需要在不同環境佈署 container ，映象檔(image)不動，可是 config 需要 mapping 到不同環境，這時候也可以使用模板，下面舉一個很簡單的栗子 考慮到 CentOS 7 預設還是給 python 2.7，所以這裡還是使用 python 2 作為運維語言， shell scrip">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-05-23T03:57:59.000Z">
+<meta property="og:updated_time" content="2018-06-05T06:35:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="本站首Po">
-<meta name="twitter:description" content="用 Hexo 重架了一次 blog ，有幾項舊站就想要修改的設定  URL 設定：/year-month-date-title 用同一個 repo 管理 source(.md) 和 redering result(.html) 由於 Next 主題在不同功能環境中會用 plugin 的方式安裝，於是 next 的 _config.yaml 會在一級目錄用 _config.yml.next.exam">
+<meta name="twitter:title" content="使用 Jinja2 in Python 進行模板替換">
+<meta name="twitter:description" content="思路jinja2 之前看別人是用在 Flask 的網頁模板，但在運維上也蠻實用的。例如今天的工作，需要在不同環境佈署 container ，映象檔(image)不動，可是 config 需要 mapping 到不同環境，這時候也可以使用模板，下面舉一個很簡單的栗子 考慮到 CentOS 7 預設還是給 python 2.7，所以這裡還是使用 python 2 作為運維語言， shell scrip">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-04-22-hello-YIIDTW/"/>
+  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-06-05-how-to-use-jinja2-template-in-python/"/>
 
 
 
@@ -129,7 +130,7 @@
   };
 </script>
 
-  <title>本站首Po | YIIDTW</title>
+  <title>使用 Jinja2 in Python 進行模板替換 | YIIDTW</title>
   
 
 
@@ -277,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-04-22-hello-YIIDTW/">
+    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-06-05-how-to-use-jinja2-template-in-python/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yiidtw">
@@ -294,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">本站首Po
+          <h1 class="post-title" itemprop="name headline">使用 Jinja2 in Python 進行模板替換
               
             
           </h1>
@@ -319,24 +320,12 @@
                 
               
 
-              <time title="Created: 2018-04-22 22:50:38" itemprop="dateCreated datePublished" datetime="2018-04-22T22:50:38+08:00">2018-04-22</time>
+              <time title="Created: 2018-06-05 14:18:04 / Modified: 14:35:41" itemprop="dateCreated datePublished" datetime="2018-06-05T14:18:04+08:00">2018-06-05</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-05-23 11:57:59" itemprop="dateModified" datetime="2018-05-23T11:57:59+08:00">2018-05-23</time>
               
             
           </span>
@@ -350,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2018-04-22-hello-YIIDTW/#comments" itemprop="discussionUrl">
+                <a href="/blog/2018-06-05-how-to-use-jinja2-template-in-python/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018-04-22-hello-YIIDTW/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018-06-05-how-to-use-jinja2-template-in-python/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -360,7 +349,7 @@
 
           
           
-             <span id="/blog/2018-04-22-hello-YIIDTW/" class="leancloud_visitors" data-flag-title="本站首Po">
+             <span id="/blog/2018-06-05-how-to-use-jinja2-template-in-python/" class="leancloud_visitors" data-flag-title="使用 Jinja2 in Python 進行模板替換">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -391,29 +380,21 @@
       
 
       
-        <p>用 Hexo 重架了一次 blog ，有幾項舊站就想要修改的設定</p>
+        <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>jinja2 之前看別人是用在 Flask 的網頁模板，但在運維上也蠻實用的。例如今天的工作，需要在不同環境佈署 container ，映象檔(image)不動，可是 config 需要 mapping 到不同環境，這時候也可以使用模板，下面舉一個很簡單的栗子</p>
+<p>考慮到 CentOS 7 預設還是給 python 2.7，所以這裡還是使用 python 2 作為運維語言， shell script 也很常用，但沒有好用的 yaml 模組讓我苦手…</p>
+<h2 id="安裝與文件架構"><a href="#安裝與文件架構" class="headerlink" title="安裝與文件架構"></a>安裝與文件架構</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ pip install jinja2</span><br><span class="line"></span><br><span class="line">$ tree .</span><br><span class="line">.</span><br><span class="line">├── convert.py</span><br><span class="line">└── template.yml</span><br></pre></td></tr></table></figure>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>先看模板<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat ./template.yml</span><br><span class="line">MyProject:</span><br><span class="line">    ProjectName: &#123;&#123; name &#125;&#125;</span><br><span class="line">    ProjectItems: &#123;% for i in items %&#125;</span><br><span class="line">        - &#123;&#123; i &#125;&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure></p>
+<p>這裡要換掉兩個變數</p>
 <ul>
-<li>URL 設定：/year-month-date-title</li>
-<li>用同一個 repo 管理 source(.md) 和 redering result(.html)</li>
-<li>由於 Next 主題在不同功能環境中會用 plugin 的方式安裝，於是 next 的 _config.yaml 會在一級目錄用 _config.yml.next.example 來維持，並 override 各環境中安裝後 Next 主題的設定檔</li>
+<li>name 變數</li>
+<li>iterator 遍歷一個 list 叫做 items，然後用 yaml 的型式(前面帶 - )呈現</li>
 </ul>
-<hr>
-<h2 id="寫草稿再發佈"><a href="#寫草稿再發佈" class="headerlink" title="寫草稿再發佈"></a>寫草稿再發佈</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new draft &quot;article title&quot; // 建立草稿</span><br><span class="line">$ hexo s --draft // 在本地預覽</span><br><span class="line">$ hexo publish &quot;不含 md 的草稿 file name&quot; // 把草稿從 _draft 移到 _posts</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="超好用工具推薦"><a href="#超好用工具推薦" class="headerlink" title="超好用工具推薦"></a>超好用工具推薦</h2><p>常寫 markdown 的人，一定會遇到要把網址轉成 markdown 格式這件事，推薦使用 tabcopy 的 chrome extension ，<a href="https://chrome.google.com/webstore/detail/tabcopy/micdllihgoppmejpecmkilggmaagfdmb?hl=zh-TW" target="_blank" rel="noopener">連結在此</a>，而且推薦從預設的 FANCY MODE 調成 SIMPLE MODE，快捷鍵是 Alt+C ，可以直接在網頁視窗上一鍵複製網站標題和 URL ，而且是 markdown 格式，再貼到文字編輯器</p>
-<hr>
-<h2 id="常用連結"><a href="#常用連結" class="headerlink" title="常用連結"></a>常用連結</h2><ul>
-<li><a href="http://www.cylong.com/blog/2017/03/26/hexo-next-disqus/" target="_blank" rel="noopener">Hexo 集成 Disqus 评论</a></li>
-<li><a href="https://notes.wanghao.work/2015-10-21-%E4%B8%BANexT%E4%B8%BB%E9%A2%98%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB%E9%87%8F%E7%BB%9F%E8%AE%A1%E5%8A%9F%E8%83%BD.html#%E9%85%8D%E7%BD%AELeanCloud" target="_blank" rel="noopener">为 Next 主题添加文章阅读量统计功能 - LeanCloud</a><ul>
-<li>LeanCloud Dashboard -&gt; 设置 -&gt; 安全中心-&gt; Web 安全域名：要加上 blog 的 domain ，例如說 <a href="https://yiidtw.github.io">https://yiidtw.github.io</a></li>
-<li>Next 的 <code>_config.yml</code> leancloud 部分 security 設為 false</li>
-</ul>
-</li>
-<li><a href="http://oomusou.io/hexo/draft/" target="_blank" rel="noopener">如何使用 Hexo 寫草稿 ? | 點燈坊</a></li>
-</ul>
-<p>TODO:</p>
-<ul>
-<li>測試 gitment(懶)</li>
+<p>簡單的 convert.py，使用 python2 的語法，並將結果寫到 foo.yml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ cat convert.py </span><br><span class="line">#!/usr/bin/python</span><br><span class="line"></span><br><span class="line">import jinja2</span><br><span class="line">templateLoader = jinja2.FileSystemLoader(searchpath=&quot;./&quot;)</span><br><span class="line">templateEnv = jinja2.Environment(loader=templateLoader)</span><br><span class="line">template = templateEnv.get_template(&quot;template.yml&quot;)</span><br><span class="line">result = template.render(name=&quot;foo&quot;, items=[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])</span><br><span class="line"></span><br><span class="line">with open(&quot;foo.yml&quot;, &quot;wb&quot;) as f:</span><br><span class="line">    f.write(result)</span><br></pre></td></tr></table></figure></p>
+<p>看結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cat foo.yml </span><br><span class="line">MyProject:</span><br><span class="line">    ProjectName: foo</span><br><span class="line">    ProjectItems: </span><br><span class="line">        - a</span><br><span class="line">        - b</span><br><span class="line">        - c</span><br></pre></td></tr></table></figure></p>
+<p>以上，這個簡單的栗子可以擴展並滿足許多我們部署上的需求與各種 workaround</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://stackoverflow.com/questions/38642557/how-to-load-jinja-template-directly-from-filesystem" target="_blank" rel="noopener">python - how to load jinja template directly from filesystem - Stack Overflow</a></li>
+<li><a href="http://docs.jinkan.org/docs/jinja2/intro.html#api" target="_blank" rel="noopener">介绍 — Jinja2 2.7 documentation</a></li>
 </ul>
 
       
@@ -433,6 +414,18 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/blog/tags/Python2/" rel="tag"># Python2</a>
+          
+            <a href="/blog/tags/DevOps/" rel="tag"># DevOps</a>
+          
+            <a href="/blog/tags/Jinja2/" rel="tag"># Jinja2</a>
+          
+            <a href="/blog/tags/CentOS7/" rel="tag"># CentOS7</a>
+          
+        </div>
+      
 
       
       
@@ -442,15 +435,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/" rel="next" title="Pandas Dataframe 隨機 shuffle 小技巧">
+                <i class="fa fa-chevron-left"></i> Pandas Dataframe 隨機 shuffle 小技巧
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/" rel="prev" title="使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster">
-                使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -629,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#寫草稿再發佈"><span class="nav-number">1.</span> <span class="nav-text">寫草稿再發佈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超好用工具推薦"><span class="nav-number">2.</span> <span class="nav-text">超好用工具推薦</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用連結"><span class="nav-number">3.</span> <span class="nav-text">常用連結</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安裝與文件架構"><span class="nav-number">2.</span> <span class="nav-text">安裝與文件架構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作"><span class="nav-number">3.</span> <span class="nav-text">操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -783,9 +776,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://yiidtw.github.io/blog/2018-04-22-hello-YIIDTW/';
-        this.page.identifier = '2018-04-22-hello-YIIDTW/';
-        this.page.title = '本站首Po';
+        this.page.url = 'http://yiidtw.github.io/blog/2018-06-05-how-to-use-jinja2-template-in-python/';
+        this.page.identifier = '2018-06-05-how-to-use-jinja2-template-in-python/';
+        this.page.title = '使用 Jinja2 in Python 進行模板替換';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
