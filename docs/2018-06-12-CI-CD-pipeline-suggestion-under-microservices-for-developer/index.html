@@ -102,27 +102,28 @@
 
 
 
-  <meta name="description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 裝完記得修改 ~/.profile 或是 ~/">
-<meta name="keywords" content="Golang,Mac book,centos 7">
+  <meta name="description" content="最近要 refactor 組上的 CI/CD pipeline ，花了一些時間研究一下，目前是針對開發人員的部分，流水線的端到端，分別是開發者，與交付有質量保證的 docker build 與相應能在 Kubernetes 跑進來的 config。某種程度上 Kubernetes 成為事實上的標準 CD 環境，於是 Git(版本管理) + Jenkins(CI server) + Kubernet">
+<meta name="keywords" content="Continous Integration,Continous Delivery,CI&#x2F;CD,Kubernetes,Jenkins,Github flow,Git flow">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在 Mac book &#x2F; Centos 7 上設置 Golang 的開發環境">
-<meta property="og:url" content="http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/index.html">
+<meta property="og:title" content="微服務下 RD 的 CI&#x2F;CD 流水線">
+<meta property="og:url" content="http://yiidtw.github.io/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/index.html">
 <meta property="og:site_name" content="YIIDTW">
-<meta property="og:description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 裝完記得修改 ~/.profile 或是 ~/">
+<meta property="og:description" content="最近要 refactor 組上的 CI/CD pipeline ，花了一些時間研究一下，目前是針對開發人員的部分，流水線的端到端，分別是開發者，與交付有質量保證的 docker build 與相應能在 Kubernetes 跑進來的 config。某種程度上 Kubernetes 成為事實上的標準 CD 環境，於是 Git(版本管理) + Jenkins(CI server) + Kubernet">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:image" content="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e">
-<meta property="og:updated_time" content="2018-05-29T07:25:15.000Z">
+<meta property="og:image" content="https://i.imgur.com/eLwbaUx.png">
+<meta property="og:image" content="https://i.imgur.com/g9ETNnI.png">
+<meta property="og:updated_time" content="2018-06-12T09:58:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在 Mac book &#x2F; Centos 7 上設置 Golang 的開發環境">
-<meta name="twitter:description" content="最近要來用 Golang 開發一些東西了，先寫個 setup 跟 Golang 有關的重要環境變量GOROOTPhoto from Quora I’m GOROOT GROOT  GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改 裝完記得修改 ~/.profile 或是 ~/">
-<meta name="twitter:image" content="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e">
+<meta name="twitter:title" content="微服務下 RD 的 CI&#x2F;CD 流水線">
+<meta name="twitter:description" content="最近要 refactor 組上的 CI/CD pipeline ，花了一些時間研究一下，目前是針對開發人員的部分，流水線的端到端，分別是開發者，與交付有質量保證的 docker build 與相應能在 Kubernetes 跑進來的 config。某種程度上 Kubernetes 成為事實上的標準 CD 環境，於是 Git(版本管理) + Jenkins(CI server) + Kubernet">
+<meta name="twitter:image" content="https://i.imgur.com/eLwbaUx.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/"/>
+  <link rel="canonical" href="http://yiidtw.github.io/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/"/>
 
 
 
@@ -132,7 +133,7 @@
   };
 </script>
 
-  <title>在 Mac book / Centos 7 上設置 Golang 的開發環境 | YIIDTW</title>
+  <title>微服務下 RD 的 CI/CD 流水線 | YIIDTW</title>
   
 
 
@@ -280,7 +281,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/">
+    <link itemprop="mainEntityOfPage" href="http://yiidtw.github.io/blog/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yiidtw">
@@ -297,7 +298,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">在 Mac book / Centos 7 上設置 Golang 的開發環境
+          <h1 class="post-title" itemprop="name headline">微服務下 RD 的 CI/CD 流水線
               
             
           </h1>
@@ -322,24 +323,12 @@
                 
               
 
-              <time title="Created: 2018-05-23 15:31:52" itemprop="dateCreated datePublished" datetime="2018-05-23T15:31:52+08:00">2018-05-23</time>
+              <time title="Created: 2018-06-12 16:47:59 / Modified: 17:58:22" itemprop="dateCreated datePublished" datetime="2018-06-12T16:47:59+08:00">2018-06-12</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-05-29 15:25:15" itemprop="dateModified" datetime="2018-05-29T15:25:15+08:00">2018-05-29</time>
               
             
           </span>
@@ -353,9 +342,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2018-05-23-golang-dev-setup/#comments" itemprop="discussionUrl">
+                <a href="/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018-05-23-golang-dev-setup/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -363,7 +352,7 @@
 
           
           
-             <span id="/blog/2018-05-23-golang-dev-setup/" class="leancloud_visitors" data-flag-title="在 Mac book / Centos 7 上設置 Golang 的開發環境">
+             <span id="/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/" class="leancloud_visitors" data-flag-title="微服務下 RD 的 CI/CD 流水線">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -394,59 +383,46 @@
       
 
       
-        <p>最近要來用 Golang 開發一些東西了，先寫個 setup</p>
-<h2 id="跟-Golang-有關的重要環境變量"><a href="#跟-Golang-有關的重要環境變量" class="headerlink" title="跟 Golang 有關的重要環境變量"></a>跟 Golang 有關的重要環境變量</h2><h3 id="GOROOT"><a href="#GOROOT" class="headerlink" title="GOROOT"></a>GOROOT</h3><p><img src="https://qph.fs.quoracdn.net/main-qimg-9226c86887a176e77eb32e4db96f628e" alt=""><br><a href="https://www.quora.com/What-was-the-significance-of-Groot-saying-We-are-Groot-near-the-end-of-the-movie-when-all-through-he-is-only-capable-of-saying-I-am-Groot" target="_blank" rel="noopener">Photo from Quora</a> I’m <del>GOROOT</del> GROOT</p>
+        <p>最近要 refactor 組上的 CI/CD pipeline ，花了一些時間研究一下，目前是針對開發人員的部分，流水線的端到端，分別是開發者，與交付有質量保證的 docker build 與相應能在 Kubernetes 跑進來的 config。某種程度上 Kubernetes 成為事實上的標準 CD 環境，於是 Git(版本管理) + Jenkins(CI server) + Kubernetes(CD target env) 的組合，目前應該是個很熱門的組合</p>
+<hr>
+<h2 id="Mindset"><a href="#Mindset" class="headerlink" title="Mindset"></a>Mindset</h2><p>對 best practices 有興趣的同學可以參考這篇文章 <a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-ci-cd-best-practices" target="_blank" rel="noopener">An Introduction to CI/CD Best Practices | DigitalOcean</a> ，對我們來說，有以下的總結</p>
 <ul>
-<li>GOROOT 就是 golang 安裝路徑，我直接用官方的 installer for MAC (.pkg) 安裝，預設會在 /usr/local/go，若客製化需要可更改</li>
-<li>裝完記得修改 ~/.profile 或是 ~/.bash_profile，修改完要記得 source<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$PATH:/usr/local/go/bin</span><br></pre></td></tr></table></figure>
+<li>盡早測試，速度快的測試先測</li>
+<li>測試失敗，能盡速修正，包括重新出 build</li>
+<li>縮短 [失敗-修正] itertaion 的時間</li>
+<li>main repo 的分支盡量少</li>
+<li>在 pipeline 中增加 Observability，可以直接觀察到各階段的結果(成功或失敗)</li>
+</ul>
+<p>Obervability ，可以降低大家的 workload ，RD/QA 不必每個人都熟 pipeline 的工具或 Kubernetes ，可以直接看到 build fail 的 log 或是 service 的 debug log ， DevOps 也不用常常 ssh 或 kubectl 到目標機器，這事後面慢慢補說</p>
+<h2 id="Tesing-Edge"><a href="#Tesing-Edge" class="headerlink" title="Tesing Edge"></a>Tesing Edge</h2><p>在看 flow 之前，我們需要先定義 testing edge ，包括</p>
+<ul>
+<li>以 edge 的觀念去區分各階段測試需要涵蓋的範圍</li>
+<li>適當的分工給 RD、QA ，精確的以 test case 定義交付的 docker image 質量</li>
+</ul>
+<p>設計好的 pipeline 好像是挖洞，以 automation 設立 checkpoint ，以測試的角度來看 RD/QA 只要專注在寫 test case ，填到對應的洞， pipeline 就會自動跑完 test case ，並給出人可閱讀的 report</p>
+<p><img src="https://i.imgur.com/eLwbaUx.png" alt="testing edge"></p>
+<p>這是我司的 testing edge 定義，每個 team 對於不同的 product ， testing edge 的定義可能不一樣，參考了這篇文章 <a href="https://medium.com/@nathankpeck/microservice-testing-unit-tests-d795194fe14e" target="_blank" rel="noopener">Microservice Testing: Unit Tests – Nathan Peck – Medium</a> ，我認為倒三角更符合我對 testing 的想像， test cases 應該越來越收斂，耗時越久的越晚執行，然後盡早失敗。我司的 RD 的 pipleline 會需要負責上面三個 testing edge 涵蓋的內容</p>
+<ul>
+<li>Unit Tests<ul>
+<li>function, class level 的測試，有 language dependency</li>
+</ul>
+</li>
+<li>Smoking Tests<ul>
+<li>依照 RD deliver 的 code、config、Dockerfile 包一個 docker image ，看能不能 build success</li>
+<li>跑過 test folder 底下的 test cases</li>
+<li>用 mock client 與該 container 互動，打 test case，部分 mock client 可能直接用 docker compose 起一個真的，例如 mysql ，比設計假的還方便</li>
+</ul>
+</li>
+<li>Integration Tests<ul>
+<li>container landing on Kubernetes ，測試各個微服務的可達性與 config 是否正確</li>
+</ul>
 </li>
 </ul>
-<h3 id="GOPATH-最重要"><a href="#GOPATH-最重要" class="headerlink" title="GOPATH (最重要)"></a>GOPATH (最重要)</h3><ul>
-<li>預設在 $HOME/go ，若客製化需要可更改</li>
-<li>通常會有三個 dir ，分別是 src、pkg、bin ，我們只需要手動創建 ~/go/src ，像是 <code>$ mkdir -p $HOME/go/src</code> ，其他兩個會在 go install 有需要時自動創建</li>
-</ul>
-<h3 id="GOBIN"><a href="#GOBIN" class="headerlink" title="GOBIN"></a>GOBIN</h3><ul>
-<li>基本上不設，可為空，若客製化需要可更改</li>
-</ul>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
-<li>可用 <code>$ go env</code> 查看 golang 用到相關的環境變數</li>
-<li>project 要用到的版本管理 a.k.a. git ，應該在 src 下，一個 project 一個 dir，詳見下段工程目錄結構</li>
-</ul>
-<hr>
-<h2 id="CentOS-7-上安裝-go-開發環境"><a href="#CentOS-7-上安裝-go-開發環境" class="headerlink" title="CentOS 7  上安裝 go 開發環境"></a>CentOS 7  上安裝 go 開發環境</h2><ul>
-<li>先去官方 source wget 最新的 tar 檔 <a href="https://golang.org/dl/" target="_blank" rel="noopener">Downloads - The Go Programming Language</a></li>
-<li>解壓縮</li>
-<li>設置 Path<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /tmp; wget https://dl.google.com/go/go1.10.2.linux-amd64.tar.gz</span><br><span class="line">$ sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>修改 ~/.bash_profile，export 後加上 <code>:/usr/local/go/bin</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ source ~/.bash_profile</span><br></pre></td></tr></table></figure></p>
-<p>可以用 <code>$ go env</code>，或 <code>$ go version</code> 測試一下安裝成果</p>
-<hr>
-<h2 id="工程目錄結構"><a href="#工程目錄結構" class="headerlink" title="工程目錄結構"></a>工程目錄結構</h2><ul>
-<li>上面說過我們需要手動創建的 dir 只有 src ，不過本篇範例還不會用到 go get ，所以 ./pkg 還不會被創建出來，為了先 demo ，我們這邊手動 mkdir 了</li>
-<li>這邊有兩個專案，分別是 hello 和 foo ，各自都有 main function</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ tree ~/go -a</span><br><span class="line"></span><br><span class="line">.</span><br><span class="line">├── bin</span><br><span class="line">│   ├── foo</span><br><span class="line">│   └── hello</span><br><span class="line">├── pkg</span><br><span class="line">└── src</span><br><span class="line">    ├── foo</span><br><span class="line">    │   ├── .git</span><br><span class="line">    │   └── foo.go</span><br><span class="line">    └── hello</span><br><span class="line">        ├── .git</span><br><span class="line">        └── hello.go</span><br></pre></td></tr></table></figure>
-<p>至於 hello.go 程式本身很簡單，就是印 hello, world 而已<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~/go/src/hello/hello.go </span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">	fmt.Printf(&quot;hello, world\n&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h2 id="編譯方法"><a href="#編譯方法" class="headerlink" title="編譯方法"></a>編譯方法</h2><h3 id="推薦用這個"><a href="#推薦用這個" class="headerlink" title="推薦用這個"></a>推薦用這個</h3><ul>
-<li>go install: 把 可執行檔放在 $GOPATH 下的 /bin，如果沒有會建對應的目錄<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go install</span><br><span class="line"></span><br><span class="line">$ ls ../../bin</span><br><span class="line">hello</span><br><span class="line"></span><br><span class="line">$ ../../bin/hello </span><br><span class="line">hello, world</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="其他可用"><a href="#其他可用" class="headerlink" title="其他可用"></a>其他可用</h3><ul>
-<li><p>go build: 直接在 .go 所在的 dir 編出可執行檔</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go build</span><br><span class="line"></span><br><span class="line">$ ls</span><br><span class="line">hello		hello.go</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>go run: 忽略編譯過程，直接跑出結果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/go/src/hello</span><br><span class="line">$ go run hello.go</span><br><span class="line">hello, world!!</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h2><ul>
-<li><a href="https://golang.org/doc/install" target="_blank" rel="noopener">golang.org - Getting Started</a> </li>
-<li><a href="https://www.cnblogs.com/zhaof/p/7906722.html" target="_blank" rel="noopener">初学者没有搞明白的GOROOT,GOPATH,GOBIN,project目录 - python修行路 - 博客园</a></li>
-<li><a href="https://blog.csdn.net/Alsmile/article/details/48290223" target="_blank" rel="noopener">关于GOROOT、GOPATH、GOBIN、project目录 - CSDN博客</a></li>
-</ul>
+<h2 id="Flow"><a href="#Flow" class="headerlink" title="Flow"></a>Flow</h2><p><img src="https://i.imgur.com/g9ETNnI.png" alt="pipeline"></p>
+<p>可以看到我們除了用，Git + Jenkins + Kubernetes ，還用了 Harbor ，可以參考這篇文章 <a href="http://vmware.github.io/harbor/" target="_blank" rel="noopener">Harbor™ by VMware®</a>，可以想像就是 docker image 的 git ，用起來也很爽，就先不描述了</p>
+<p>這個圖還有隱含著我們使用 Github flow + Git flow 去協作，RD 要 fork main repo 的 master branch 到自己的 repo ，所有進 code 都要透過 PR 的方式，經過 CI 的 smoking test 和人為的 code review，而這些結果和人的意見會整合在該 PR 的 issue ，讓 RD head 去決定要不要 merge 這個 PR，可以參考這篇文章 <a href="https://blog.wu-boy.com/2017/12/github-flow-vs-git-flow/" target="_blank" rel="noopener">GitHub Flow 及 Git Flow 流程使用時機 | 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></p>
+<p>RD head 想要出 build 的時候，就下一個 git tag ，透過 web hook trigger 新的 build，直接部署到 Kubernetes ，我司目前是部署到 AWS，之後預期會有幾篇文章和 code snippet 針對這個架構作 POC 再詳述</p>
+<p>以上，待續</p>
 
       
     </div>
@@ -467,11 +443,19 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Golang/" rel="tag"># Golang</a>
+            <a href="/blog/tags/Continous-Integration/" rel="tag"># Continous Integration</a>
           
-            <a href="/blog/tags/Mac-book/" rel="tag"># Mac book</a>
+            <a href="/blog/tags/Continous-Delivery/" rel="tag"># Continous Delivery</a>
           
-            <a href="/blog/tags/centos-7/" rel="tag"># centos 7</a>
+            <a href="/blog/tags/CI-CD/" rel="tag"># CI/CD</a>
+          
+            <a href="/blog/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+            <a href="/blog/tags/Jenkins/" rel="tag"># Jenkins</a>
+          
+            <a href="/blog/tags/Github-flow/" rel="tag"># Github flow</a>
+          
+            <a href="/blog/tags/Git-flow/" rel="tag"># Git flow</a>
           
         </div>
       
@@ -484,8 +468,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018-05-23-how-to-modify-RPM-build/" rel="next" title="如何修改 RPM build，以 unzip 套件為例">
-                <i class="fa fa-chevron-left"></i> 如何修改 RPM build，以 unzip 套件為例
+              <a href="/blog/2018-06-05-how-to-use-jinja2-template-in-python/" rel="next" title="使用 Python 的 Jinja2 進行模板替換">
+                <i class="fa fa-chevron-left"></i> 使用 Python 的 Jinja2 進行模板替換
               </a>
             
           </div>
@@ -493,10 +477,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/" rel="prev" title="Pandas Dataframe 隨機 shuffle 小技巧">
-                Pandas Dataframe 隨機 shuffle 小技巧 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -687,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#跟-Golang-有關的重要環境變量"><span class="nav-number">1.</span> <span class="nav-text">跟 Golang 有關的重要環境變量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GOROOT"><span class="nav-number">1.1.</span> <span class="nav-text">GOROOT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GOPATH-最重要"><span class="nav-number">1.2.</span> <span class="nav-text">GOPATH (最重要)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GOBIN"><span class="nav-number">1.3.</span> <span class="nav-text">GOBIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-7-上安裝-go-開發環境"><span class="nav-number">2.</span> <span class="nav-text">CentOS 7  上安裝 go 開發環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程目錄結構"><span class="nav-number">3.</span> <span class="nav-text">工程目錄結構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#編譯方法"><span class="nav-number">4.</span> <span class="nav-text">編譯方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推薦用這個"><span class="nav-number">4.1.</span> <span class="nav-text">推薦用這個</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他可用"><span class="nav-number">4.2.</span> <span class="nav-text">其他可用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mindset"><span class="nav-number">1.</span> <span class="nav-text">Mindset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tesing-Edge"><span class="nav-number">2.</span> <span class="nav-text">Tesing Edge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flow"><span class="nav-number">3.</span> <span class="nav-text">Flow</span></a></li></ol></div>
             
 
           </div>
@@ -841,9 +821,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/';
-        this.page.identifier = '2018-05-23-golang-dev-setup/';
-        this.page.title = '在 Mac book / Centos 7 上設置 Golang 的開發環境';
+        this.page.url = 'http://yiidtw.github.io/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/';
+        this.page.identifier = '2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/';
+        this.page.title = '微服務下 RD 的 CI/CD 流水線';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');

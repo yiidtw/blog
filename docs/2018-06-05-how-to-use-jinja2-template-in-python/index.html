@@ -105,14 +105,14 @@
   <meta name="description" content="思路jinja2 之前看別人是用在 Flask 的網頁模板，但在運維上也蠻實用的。例如今天的工作，需要在不同環境佈署 container ，映象檔(image)不動，可是 config 需要 mapping 到不同環境，這時候也可以使用模板，下面舉一個很簡單的栗子 考慮到 CentOS 7 預設還是給 python 2.7，所以這裡還是使用 python 2 作為運維語言， shell scrip">
 <meta name="keywords" content="Python2,DevOps,Jinja2,CentOS7">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用 Jinja2 in Python 進行模板替換">
+<meta property="og:title" content="使用 Python 的 Jinja2 進行模板替換">
 <meta property="og:url" content="http://yiidtw.github.io/blog/2018-06-05-how-to-use-jinja2-template-in-python/index.html">
 <meta property="og:site_name" content="YIIDTW">
 <meta property="og:description" content="思路jinja2 之前看別人是用在 Flask 的網頁模板，但在運維上也蠻實用的。例如今天的工作，需要在不同環境佈署 container ，映象檔(image)不動，可是 config 需要 mapping 到不同環境，這時候也可以使用模板，下面舉一個很簡單的栗子 考慮到 CentOS 7 預設還是給 python 2.7，所以這裡還是使用 python 2 作為運維語言， shell scrip">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-06-05T06:35:41.000Z">
+<meta property="og:updated_time" content="2018-06-08T10:20:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用 Jinja2 in Python 進行模板替換">
+<meta name="twitter:title" content="使用 Python 的 Jinja2 進行模板替換">
 <meta name="twitter:description" content="思路jinja2 之前看別人是用在 Flask 的網頁模板，但在運維上也蠻實用的。例如今天的工作，需要在不同環境佈署 container ，映象檔(image)不動，可是 config 需要 mapping 到不同環境，這時候也可以使用模板，下面舉一個很簡單的栗子 考慮到 CentOS 7 預設還是給 python 2.7，所以這裡還是使用 python 2 作為運維語言， shell scrip">
 
 
@@ -130,7 +130,7 @@
   };
 </script>
 
-  <title>使用 Jinja2 in Python 進行模板替換 | YIIDTW</title>
+  <title>使用 Python 的 Jinja2 進行模板替換 | YIIDTW</title>
   
 
 
@@ -295,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用 Jinja2 in Python 進行模板替換
+          <h1 class="post-title" itemprop="name headline">使用 Python 的 Jinja2 進行模板替換
               
             
           </h1>
@@ -320,12 +320,24 @@
                 
               
 
-              <time title="Created: 2018-06-05 14:18:04 / Modified: 14:35:41" itemprop="dateCreated datePublished" datetime="2018-06-05T14:18:04+08:00">2018-06-05</time>
+              <time title="Created: 2018-06-05 14:18:04" itemprop="dateCreated datePublished" datetime="2018-06-05T14:18:04+08:00">2018-06-05</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-08 18:20:10" itemprop="dateModified" datetime="2018-06-08T18:20:10+08:00">2018-06-08</time>
               
             
           </span>
@@ -349,7 +361,7 @@
 
           
           
-             <span id="/blog/2018-06-05-how-to-use-jinja2-template-in-python/" class="leancloud_visitors" data-flag-title="使用 Jinja2 in Python 進行模板替換">
+             <span id="/blog/2018-06-05-how-to-use-jinja2-template-in-python/" class="leancloud_visitors" data-flag-title="使用 Python 的 Jinja2 進行模板替換">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -445,6 +457,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/" rel="prev" title="微服務下 RD 的 CI/CD 流水線">
+                微服務下 RD 的 CI/CD 流水線 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -527,7 +543,7 @@
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -572,7 +588,19 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
@@ -778,7 +806,7 @@
       var disqus_config = function () {
         this.page.url = 'http://yiidtw.github.io/blog/2018-06-05-how-to-use-jinja2-template-in-python/';
         this.page.identifier = '2018-06-05-how-to-use-jinja2-template-in-python/';
-        this.page.title = '使用 Jinja2 in Python 進行模板替換';
+        this.page.title = '使用 Python 的 Jinja2 進行模板替換';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');

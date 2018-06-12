@@ -1,5 +1,5 @@
 ---
-title: 使用 Jinja2 in Python 進行模板替換 
+title: 使用 Python 的 Jinja2 進行模板替換 
 date: 2018-06-05 14:18:04
 tags:
 - Python2
