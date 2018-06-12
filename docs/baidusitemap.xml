@@ -3,6 +3,28 @@
 
 
     
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>在 Mac book / Centos 7 上設置 Golang 的開發環境</title>
+        <pubTime>2018-05-23T07:31:52.000Z</pubTime>
+        
+        <tag>Golang</tag>
+         
+        <tag>Mac book</tag>
+         
+        <tag>centos 7</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
   <url>
     <loc>https://yiidtw.github.io/blog/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/</loc>
     <lastmod>2018-06-12T12:19:18.000Z</lastmod>
@@ -24,27 +46,6 @@
         <tag>Github flow</tag>
          
         <tag>Git flow</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/</loc>
-    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
-    <data>
-        <display>
-        <title>在 Mac book / Centos 7 上設置 Golang 的開發環境</title>
-        <pubTime>2018-05-23T07:31:52.000Z</pubTime>
-        
-        <tag>Golang</tag>
-         
-        <tag>Mac book</tag>
-         
-        <tag>centos 7</tag>
          
          
            
