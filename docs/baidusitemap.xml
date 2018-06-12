@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>微服務下 RD 的 CI/CD 流水線</title>
+        <pubTime>2018-06-12T08:47:59.000Z</pubTime>
+        
+        <tag>Continous Integration</tag>
+         
+        <tag>Continous Delivery</tag>
+         
+        <tag>CI/CD</tag>
+         
+        <tag>Kubernetes</tag>
+         
+        <tag>Jenkins</tag>
+         
+        <tag>Github flow</tag>
+         
+        <tag>Git flow</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>在 Mac book / Centos 7 上設置 Golang 的開發環境</title>
+        <pubTime>2018-05-23T07:31:52.000Z</pubTime>
+        
+        <tag>Golang</tag>
+         
+        <tag>Mac book</tag>
+         
+        <tag>centos 7</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-04-22-hello-YIIDTW/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>本站首Po</title>
+        <pubTime>2018-04-22T14:50:38.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>Pandas Dataframe 隨機 shuffle 小技巧</title>
+        <pubTime>2018-05-29T06:51:33.000Z</pubTime>
+        
+        <tag>pandas</tag>
+         
+        <tag>dataframe</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-05-23-how-to-modify-RPM-build/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>如何修改 RPM build，以 unzip 套件為例</title>
+        <pubTime>2018-05-23T06:40:45.000Z</pubTime>
+        
+        <tag>RPM</tag>
+         
+        <tag>SRPM</tag>
+         
+        <tag>unzip</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-06-05-how-to-use-jinja2-template-in-python/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用 Python 的 Jinja2 進行模板替換</title>
+        <pubTime>2018-06-05T06:18:04.000Z</pubTime>
+        
+        <tag>Python2</tag>
+         
+        <tag>DevOps</tag>
+         
+        <tag>Jinja2</tag>
+         
+        <tag>CentOS7</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-05-15-install-kubernetes-1-9-with-HA-using-kubeadm/</loc>
+    <lastmod>2018-05-17T15:47:06.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用 kubeadm 安裝 Kubernetes 1.9 高可用 cluster</title>
+        <pubTime>2018-05-15T05:48:12.000Z</pubTime>
+        
+        <tag>Kubernetes</tag>
+         
+        <tag>kubeadm</tag>
+         
+        <tag>High Availability</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+</urlset>
