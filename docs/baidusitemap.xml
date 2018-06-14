@@ -4,6 +4,25 @@
 
     
   <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-06-14-class-note-of-machine-learning-crash-course/</loc>
+    <lastmod>2018-06-14T15:55:21.000Z</lastmod>
+    <data>
+        <display>
+        <title>machine learning crash course(mlcc) 修課心得</title>
+        <pubTime>2018-06-14T15:55:21.000Z</pubTime>
+        
+        <tag>mlcc</tag>
+         
+        <tag>machine learning</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://yiidtw.github.io/blog/blog/2018-04-22-hello-YIIDTW/</loc>
     <lastmod>2018-06-12T13:32:37.000Z</lastmod>
     <data>
@@ -18,27 +37,6 @@
     </url>
 
     
-    
-  <url>
-    <loc>https://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/</loc>
-    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
-    <data>
-        <display>
-        <title>在 Mac book / Centos 7 上設置 Golang 的開發環境</title>
-        <pubTime>2018-05-23T07:31:52.000Z</pubTime>
-        
-        <tag>Golang</tag>
-         
-        <tag>Mac book</tag>
-         
-        <tag>centos 7</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
   <url>
     <loc>https://yiidtw.github.io/blog/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/</loc>
@@ -70,16 +68,18 @@
 
     
   <url>
-    <loc>https://yiidtw.github.io/blog/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/</loc>
+    <loc>https://yiidtw.github.io/blog/blog/2018-05-23-golang-dev-setup/</loc>
     <lastmod>2018-06-12T12:19:18.000Z</lastmod>
     <data>
         <display>
-        <title>Pandas Dataframe 隨機 shuffle 小技巧</title>
-        <pubTime>2018-05-29T06:51:33.000Z</pubTime>
+        <title>在 Mac book / Centos 7 上設置 Golang 的開發環境</title>
+        <pubTime>2018-05-23T07:31:52.000Z</pubTime>
         
-        <tag>pandas</tag>
+        <tag>Golang</tag>
          
-        <tag>dataframe</tag>
+        <tag>Mac book</tag>
+         
+        <tag>centos 7</tag>
          
          
            
@@ -101,6 +101,25 @@
         <tag>SRPM</tag>
          
         <tag>unzip</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://yiidtw.github.io/blog/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/</loc>
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    <data>
+        <display>
+        <title>Pandas Dataframe 隨機 shuffle 小技巧</title>
+        <pubTime>2018-05-29T06:51:33.000Z</pubTime>
+        
+        <tag>pandas</tag>
+         
+        <tag>dataframe</tag>
          
          
            

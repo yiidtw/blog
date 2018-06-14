@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://yiidtw.github.io/blog/2018-06-14-class-note-of-machine-learning-crash-course/</loc>
+    
+    <lastmod>2018-06-14T15:55:21.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://yiidtw.github.io/blog/2018-04-22-hello-YIIDTW/</loc>
     
     <lastmod>2018-06-12T13:32:37.000Z</lastmod>
@@ -16,13 +23,6 @@
   </url>
   
   <url>
-    <loc>https://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/</loc>
-    
-    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://yiidtw.github.io/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/</loc>
     
     <lastmod>2018-06-12T12:19:18.000Z</lastmod>
@@ -30,7 +30,7 @@
   </url>
   
   <url>
-    <loc>https://yiidtw.github.io/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/</loc>
+    <loc>https://yiidtw.github.io/blog/2018-05-23-golang-dev-setup/</loc>
     
     <lastmod>2018-06-12T12:19:18.000Z</lastmod>
     
@@ -38,6 +38,13 @@
   
   <url>
     <loc>https://yiidtw.github.io/blog/2018-05-23-how-to-modify-RPM-build/</loc>
+    
+    <lastmod>2018-06-12T12:19:18.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yiidtw.github.io/blog/2018-05-29-how-to-shuffle-dataframe-in-pandas/</loc>
     
     <lastmod>2018-06-12T12:19:18.000Z</lastmod>
     
