@@ -30,11 +30,31 @@ tags:
 
 ## 線性迴歸與神經網路
 
+ML 的演算法可大致分為 distance-based 或是 tree-based ，在 feature 夠好的情況下，不管用哪個 model 理論上都可以給出夠好的結果。 mlcc 沒有提到 tree-based 的演算法，所以以下的小結也僅針對 distance-based 的算法。 distance-based  無論在多高維的空間，本質上都要求該 model 的 loss function 最小化，當 model 過於複雜時，最小化的過程都是尋找 loss function 梯度下降的方向，迭代(iteration)求取 loss function 的最小值，此種方法稱為 grdient decent，來得到最佳的 model 。而梯度下降的速率，稱為 learning rate ，會大大決決定結果的好壞
+
+- linear regression
+    - 最簡單也最快的模型
+    - 如果只有一個 feature ，而有二元分類，則 y=wx+b  可以視為 2D 平面上用一條線把兩群點分開
+    - loss function 是 MSE(Mean Square Error)
+    - linear regression 有 exact form ，可以不靠迭代求取最小值
+    - 如果要用線性模型學習顯然為非線性的樣本，可以透過 feature engineering 的方式以 cross product 取得新的特徵，照樣以線性模型學習
+- logistic regression
+    - 基本上就是把 linear regression 丟進 sigmoid function，使得預測值介於 0~1 之間，可以看成 probability
+    - loss function 是 logloss，來自 information theory 中 entropy(熵) 的概念
+    - 分類
+- neural network
+    - 要學習簡單的 non-linear model 可以用 cross product 的方式；如果是複雜一點的 non-linear ，可以透過 nn
+    - nn 的原理是疊加不同的 hidden layer ，包括線性(linear regression)與非線性 hidden layer 來學習 non-linearity
+    - 非線性層是把上一層的 output 經過一個  activation function 達到非線性輸出的 neuron ，主流的 activation funciton 選擇有 ReLU
+    - nn 降低 loss function 的演算法稱為 back-prop ，可以視為 gradient decent 的變形
+    - 由於 back-prop 需要微分，我們會需要 loss function、activation function 最好是可微，至少是大部分可微
 
 ## 如何訓練一個 model
-### train set, test set & validation set
-### high bias vs high variance
-### 如何衡量一個 model
+- 首先我們需要先定義問題，或是把問題 mapping 成機器學習可以解決的問題
+- 再來要好好的清理資料，甚至進行 feature engineering
+- train set, test set & validation set
+- high bias vs high variance
+- 如何衡量一個 model
 
 ## 最小化 loss function
 ### gradient decent
@@ -47,4 +67,3 @@ tags:
 - L2
 - Early Stop
 - Dropout
-
