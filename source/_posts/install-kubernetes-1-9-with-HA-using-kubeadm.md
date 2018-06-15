@@ -162,9 +162,145 @@ reboot
 
 ## STEP 2: 建立 ETCD cluster
 
+(2018/06/15 更新)
+
 ETCD 就像是 zookeeper 一類 key-value 的 store，在 Kubernetes cluster 裡扮演的是紀錄整個 cluster 狀態的角色，可以以 daemon 方式佈署、以 static pod 的方式佈署，或是佈署在其他的 EC2 instances。官方教學有教 daemon 和 pod 的兩種佈署方式，但是 pod 的佈署方式有點像雞生蛋蛋生雞的問題，如果 ETCD cluster 沒起來，那 Kubernetes 怎麼起來？可能要先佈一個 ETCD daemon -> 起 Kubernetes cluster -> 在 Kubernetes cluster 裡起 ETCD cluster -> 資料從 K8S cluster 外的 ETCD daemon migrate 到 K8S cluster 內的 ETCD cluster ，用手動的方式想到就覺得麻煩…所以我們這邊會直接用 daemon 的方式佈署 ETCD cluster，分別在 3 個 masters 上
 
-這部分比較繁瑣，而且 ETCD cluster 不僅可以用在紀錄 Kubernets 的狀態，也可以用在 general 需要 Key-Value 的場景，所以我們會另外開一篇解釋如何安裝。需要注意的是，如果需要 reset kubeadm ，由於 ETCD cluster 若以 daemon 的方式佈署在 K8S cluster 之外，那執行 kubeadm reset 之後，需要先停掉 3 台 ETCD cluster -> 清除各自 /var/lib/etcd/member 下的所有資料 -> 重啟 ETCD cluster ，這樣原先的 K8S cluster 資料才會被完全清除
+首先要下載 cfssl 和 cfssl 工具，我們會在 bastion 上產生 etcd 所要用的 key ，再丟到 master node 上
+```
+$ mkdir -p ~/bin
+$ curl -o ~/bin https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+$ curl -o ~/bin https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+$ chmod +x ~/bin/cfssl
+```
+
+我們要先建立 etcd 要吃的 config 檔，分別是 ca-config.json 、ca-csr.json、client.json，找個 dir 放，例如 bastion:~/etcd/common
+```
+$ mkdir -p ~/etcd/common
+```
+
+下面的 json 檔請依自己的需求修改，請參考 [Creating HA clusters with kubeadm - Kubernetes](https://kubernetes.io/docs/setup/independent/high-availability/)
+```
+cat > ~/etcd/common/ca-config.json <<EOF
+{
+   "signing": {
+       "default": {
+           "expiry": "43800h"
+       },
+       "profiles": {
+           "server": {
+               "expiry": "43800h",
+               "usages": [
+                   "signing",
+                   "key encipherment",
+                   "server auth",
+                   "client auth"
+               ]
+           },
+           "client": {
+               "expiry": "43800h",
+               "usages": [
+                   "signing",
+                   "key encipherment",
+                   "client auth"
+               ]
+           },
+           "peer": {
+               "expiry": "43800h",
+               "usages": [
+                   "signing",
+                   "key encipherment",
+                   "server auth",
+                   "client auth"
+               ]
+           }
+       }
+   }
+}
+EOF
+```
+
+```
+cat > ~/etcd/common/ca-csr.json <<EOF
+{
+   "CN": "etcd",
+   "key": {
+       "algo": "rsa",
+       "size": 2048
+   }
+}
+EOF
+```
+
+```
+cat >~/etcd/common/client.json <<EOF
+{
+  "CN": "client",
+  "key": {
+      "algo": "ecdsa",
+      "size": 256
+  }
+}
+EOF
+```
+
+接下來產生 etcd 要用的 key
+```
+$ cd ~/etcd/common
+$ ~/bin/cfssl gencert -initca ca-csr.json | ~/bin/cfssljson -bare ca -
+$ ~/bin/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=client client.json | ~/bin/cfssljson -bare client
+```
+
+這時候會產生所需要的各種 pem 和 key
+- ca.pem
+- ca-key.pem
+- client.pem
+- client-key.pem
+連同之前的 ca-config.json ，我們會需要這五個檔案，加上下面的 config.json ，各 6 個檔案，對 3 個 etcd 產生所需要的檔案，只有 config.json 是不同的，其他 5 個檔案在 3 個 etcd server 上是相同的，以下是 config.json 的範例
+```
+cat >~/etcd/common/config.json <<EOF
+{
+    "CN": "HOSTNAME_OF_ETCD0",
+    "hosts": [
+        "127.0.0.1",
+        "IP_OF_ETCD0",
+        "IP_OF_ETCD1",
+        "IP_OF_ETCD2",
+        "HOSTNAME_OF_ETCD0",
+        "HOSTNAME_OF_ETCD1",
+        "HOSTNAME_OF_ETCD2"
+    ],
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "TW",
+            "L": "Taipei",
+            "ST": "Taipei"
+        }
+    ]
+}
+```
+
+可以看到主要的差別在 CN ，你應該會想開三個子資料夾，cp 剛剛 6 個檔案，然後執行下面的指令
+```
+$ ~/bin/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=server config.json | ~/bin/cfssljson -bare server
+$ ~/bin/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=peer config.json | ~/bin/cfssljson -bare peer
+```
+
+將這 3 個子資料夾下產生的所有檔案，各自 scp 到 3 台 etcd server 的 /etc/etcd/ssl，然後在這 3 台 etcd server 分別執行
+```
+$ cd ~; curl -sSL https://github.com/coreos/etcd/releases/download/v3.1.10/etcd-v3.1.10-linux-amd64.tar.gz \
+ | sudo tar -xzv --strip-components=1 -C /usr/local/bin/; \
+$ sudo chown root:root /usr/local/bin/etcd*; \
+$ sudo systemctl daemon-reload && sudo systemctl enable etcd && sudo systemctl restart etcd
+``` 
+
+這樣， etcd 就裝完了 XD
+
+這部分比較繁瑣，而且 ETCD cluster 不僅可以用在紀錄 Kubernets 的狀態，也可以用在 general 需要 Key-Value 的場景。需要注意的是，如果需要 reset kubeadm ，由於 ETCD cluster 若以 daemon 的方式佈署在 K8S cluster 之外，那執行 kubeadm reset 之後，需要先停掉 3 台 ETCD cluster -> 清除各自 /var/lib/etcd/member 下的所有資料 -> 重啟 ETCD cluster ，這樣原先的 K8S cluster 資料才會被完全清除
 
 ---
 
