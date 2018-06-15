@@ -34,6 +34,11 @@ $ hexo publish "不含 md 的草稿 file name" // 把草稿從 _draft 移到 _po
     - LeanCloud Dashboard -> 设置 -> 安全中心-> Web 安全域名：要加上 blog 的 domain ，例如說 https://yiidtw.github.io
     - Next 的 `_config.yml` leancloud 部分 security 設為 false
 - [如何使用 Hexo 寫草稿 ? | 點燈坊](http://oomusou.io/hexo/draft/)
+- SEO
+    - [hexo博客SEO优化](http://www.dajipai.cc/archives/ec8af0f7.html)
+    - [Hexo Seo优化让你的博客在google搜索排名第一](https://www.jianshu.com/p/86557c34b671)
+    - 值得注意的是，robots.txt 和 google search console 認證網站所有權用的 googlexxx.html ，可以放在 ./source 底下，這樣 hexo clean + hexo g 的時候，才會複製進 ./docs
 
 TODO:
 - 測試 gitment(懶)
+
