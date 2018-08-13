@@ -102,28 +102,25 @@
 
 
 
-  <meta name="description" content="之前斷斷續續也修了幾門 ML/DL 的課，甚至有過一些小實作，不過這門課稍微走過一遍，許多觀念有連在一起的感覺，有關 tensorflow 實作的部分也不少，還蠻推薦的。也推薦和 Brandon Rohrer 的投影片一起看，兩個份量都不多，mlcc 大概一個禮拜空閒的時間可以掃完，後者大概三天。這兩者是我目前覺得最適合初學者釐清觀念的線上教材，核心都有講到，時間又不常。先附連結  Machine">
-<meta name="keywords" content="mlcc,machine learning">
+  <meta name="description" content="很久沒更新了… 最近研究怎麼寫遊戲的 AI ，原本是想用強化學習，學習遊戲中較優玩家的策略，但這種方法是離線學習的，每天打完要 parse log 重新訓練， AI 才會進步。然後就看了一下強化學習，希望結合 on-line learning 和 off-line learning ，關於系統性的撰寫對局 bot 相關的知識，推薦看徐讚昇教授的電腦對局理論，可惜書中比較針對完全訊息(例如棋類)，以">
+<meta name="keywords" content="algo,reinforcement learning,epsilon-greedy,multi-armed bandit machine">
 <meta property="og:type" content="article">
-<meta property="og:title" content="machine learning crash course(mlcc) 修課心得">
-<meta property="og:url" content="https://yiidtw.github.io/blog/2018-06-14-class-note-of-machine-learning-crash-course/index.html">
+<meta property="og:title" content="強化學習基礎：多臂吃角子老虎機問題">
+<meta property="og:url" content="https://yiidtw.github.io/blog/2018-08-13-the-multi-armed-bandit-problem/index.html">
 <meta property="og:site_name" content="YIIDTW">
-<meta property="og:description" content="之前斷斷續續也修了幾門 ML/DL 的課，甚至有過一些小實作，不過這門課稍微走過一遍，許多觀念有連在一起的感覺，有關 tensorflow 實作的部分也不少，還蠻推薦的。也推薦和 Brandon Rohrer 的投影片一起看，兩個份量都不多，mlcc 大概一個禮拜空閒的時間可以掃完，後者大概三天。這兩者是我目前覺得最適合初學者釐清觀念的線上教材，核心都有講到，時間又不常。先附連結  Machine">
+<meta property="og:description" content="很久沒更新了… 最近研究怎麼寫遊戲的 AI ，原本是想用強化學習，學習遊戲中較優玩家的策略，但這種方法是離線學習的，每天打完要 parse log 重新訓練， AI 才會進步。然後就看了一下強化學習，希望結合 on-line learning 和 off-line learning ，關於系統性的撰寫對局 bot 相關的知識，推薦看徐讚昇教授的電腦對局理論，可惜書中比較針對完全訊息(例如棋類)，以">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:image" content="https://docs.microsoft.com/zh-tw/azure/machine-learning/studio/media/algorithm-cheat-sheet/machine-learning-algorithm-cheat-sheet-small_v_0_6-01.png">
-<meta property="og:image" content="https://i.imgur.com/bPT3Xxa.png">
-<meta property="og:updated_time" content="2018-06-15T09:01:44.000Z">
+<meta property="og:updated_time" content="2018-08-13T03:08:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="machine learning crash course(mlcc) 修課心得">
-<meta name="twitter:description" content="之前斷斷續續也修了幾門 ML/DL 的課，甚至有過一些小實作，不過這門課稍微走過一遍，許多觀念有連在一起的感覺，有關 tensorflow 實作的部分也不少，還蠻推薦的。也推薦和 Brandon Rohrer 的投影片一起看，兩個份量都不多，mlcc 大概一個禮拜空閒的時間可以掃完，後者大概三天。這兩者是我目前覺得最適合初學者釐清觀念的線上教材，核心都有講到，時間又不常。先附連結  Machine">
-<meta name="twitter:image" content="https://docs.microsoft.com/zh-tw/azure/machine-learning/studio/media/algorithm-cheat-sheet/machine-learning-algorithm-cheat-sheet-small_v_0_6-01.png">
+<meta name="twitter:title" content="強化學習基礎：多臂吃角子老虎機問題">
+<meta name="twitter:description" content="很久沒更新了… 最近研究怎麼寫遊戲的 AI ，原本是想用強化學習，學習遊戲中較優玩家的策略，但這種方法是離線學習的，每天打完要 parse log 重新訓練， AI 才會進步。然後就看了一下強化學習，希望結合 on-line learning 和 off-line learning ，關於系統性的撰寫對局 bot 相關的知識，推薦看徐讚昇教授的電腦對局理論，可惜書中比較針對完全訊息(例如棋類)，以">
 
 
 
 
 
 
-  <link rel="canonical" href="https://yiidtw.github.io/blog/2018-06-14-class-note-of-machine-learning-crash-course/"/>
+  <link rel="canonical" href="https://yiidtw.github.io/blog/2018-08-13-the-multi-armed-bandit-problem/"/>
 
 
 
@@ -133,7 +130,7 @@
   };
 </script>
 
-  <title>machine learning crash course(mlcc) 修課心得 | YIIDTW</title>
+  <title>強化學習基礎：多臂吃角子老虎機問題 | YIIDTW</title>
   
 
 
@@ -281,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yiidtw.github.io/blog/blog/2018-06-14-class-note-of-machine-learning-crash-course/">
+    <link itemprop="mainEntityOfPage" href="https://yiidtw.github.io/blog/blog/2018-08-13-the-multi-armed-bandit-problem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yiidtw">
@@ -298,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">machine learning crash course(mlcc) 修課心得
+          <h1 class="post-title" itemprop="name headline">強化學習基礎：多臂吃角子老虎機問題
               
             
           </h1>
@@ -323,24 +320,12 @@
                 
               
 
-              <time title="Created: 2018-06-14 23:55:21" itemprop="dateCreated datePublished" datetime="2018-06-14T23:55:21+08:00">2018-06-14</time>
+              <time title="Created: 2018-08-13 10:33:58 / Modified: 11:08:10" itemprop="dateCreated datePublished" datetime="2018-08-13T10:33:58+08:00">2018-08-13</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-06-15 17:01:44" itemprop="dateModified" datetime="2018-06-15T17:01:44+08:00">2018-06-15</time>
               
             
           </span>
@@ -354,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2018-06-14-class-note-of-machine-learning-crash-course/#comments" itemprop="discussionUrl">
+                <a href="/blog/2018-08-13-the-multi-armed-bandit-problem/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018-06-14-class-note-of-machine-learning-crash-course/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018-08-13-the-multi-armed-bandit-problem/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -364,7 +349,7 @@
 
           
           
-             <span id="/blog/2018-06-14-class-note-of-machine-learning-crash-course/" class="leancloud_visitors" data-flag-title="machine learning crash course(mlcc) 修課心得">
+             <span id="/blog/2018-08-13-the-multi-armed-bandit-problem/" class="leancloud_visitors" data-flag-title="強化學習基礎：多臂吃角子老虎機問題">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -395,135 +380,25 @@
       
 
       
-        <p>之前斷斷續續也修了幾門 ML/DL 的課，甚至有過一些小實作，不過這門課稍微走過一遍，許多觀念有連在一起的感覺，有關 tensorflow 實作的部分也不少，還蠻推薦的。也推薦和 Brandon Rohrer 的投影片一起看，兩個份量都不多，mlcc 大概一個禮拜空閒的時間可以掃完，後者大概三天。這兩者是我目前覺得最適合初學者釐清觀念的線上教材，核心都有講到，時間又不常。先附連結</p>
+        <p>很久沒更新了…</p>
+<p>最近研究怎麼寫遊戲的 AI ，原本是想用強化學習，學習遊戲中較優玩家的策略，但這種方法是離線學習的，每天打完要 parse log 重新訓練， AI 才會進步。然後就看了一下強化學習，希望結合 on-line learning 和 off-line learning ，關於系統性的撰寫對局 bot 相關的知識，推薦看徐讚昇教授的電腦對局理論，可惜書中比較針對完全訊息(例如棋類)，以及兩人對局，對於我想寫的非完全訊息(撲克牌)，以及多人對局比較沒辦法直接應用</p>
+<p>至於強化學習，看了很多複雜的演算法和嘴砲的文章原本看不太懂，最後看到了吃角子老虎機的問題，終於有一點感覺了，於是稍微整理一下</p>
+<p>原理其實很簡單，我們有一隻 k 臂的吃角子老虎機，每支吐幣的機率不同，而我們不知道這個機率如何分布，我們如何在有限回合取得較大的報酬？</p>
 <ul>
-<li><a href="https://developers.google.com/machine-learning/crash-course/" target="_blank" rel="noopener">Machine Learning Crash Course</a> </li>
-<li><a href="https://brohrer.mcknote.com/zh-Hant/" target="_blank" rel="noopener">資料科學．機器．人</a></li>
+<li>最簡單的想法是隨機拉臂</li>
+<li>再來就是透過有限的測試，找到報酬最大的那支臂，狂拉</li>
+<li>聽起來我們可以結合上述兩種策略，一面探索未知的報酬，一面著力在現有最大報酬的那支臂</li>
 </ul>
-<p>以下是我很粗略的筆記，關於如何開始一個 ML/DL 的 project 所需要的最小知識背景，不含 tf api 操作，也不涉及數學證明</p>
-<hr>
-<h2 id="機器學習能解決的問題"><a href="#機器學習能解決的問題" class="headerlink" title="機器學習能解決的問題"></a>機器學習能解決的問題</h2><ul>
-<li>regression：預測值、機率</li>
-<li>classification：二元或多種分類</li>
-<li>clustering：自動分群</li>
-<li>anomely detection：異常值檢測</li>
-</ul>
-<p>比較常遇到的是帶有 label 的監督式學習，應用在 regression 和 classification 的問題，舉個例子</p>
+<p>所以演算法可以簡述如下，</p>
 <ul>
-<li>根據地區人口、經緯度…等，與房價的資料，建立預測房價模型</li>
-<li>根據手寫影像與人為 label 的資料，辨識數字</li>
+<li>有 ϵ 的機率隨機選臂，好比 ϵ = 0.1</li>
+<li>紀錄每支臂拉的次數以及平均報酬，另外 1 - ϵ 的機率就拉平均報酬最大的那隻</li>
 </ul>
-<p>往往我們可以先從簡單、線性的模型開始建立，再漸進複雜，針對不同問題，可以參考微軟的 Algorithm Cheat Sheet，見下圖</p>
-<p><img src="https://docs.microsoft.com/zh-tw/azure/machine-learning/studio/media/algorithm-cheat-sheet/machine-learning-algorithm-cheat-sheet-small_v_0_6-01.png" alt="Microsoft Azure Machine Learnning: Algorithm Cheat Sheet"></p>
-<h2 id="線性迴歸與神經網路"><a href="#線性迴歸與神經網路" class="headerlink" title="線性迴歸與神經網路"></a>線性迴歸與神經網路</h2><p>ML 的演算法可大致分為 distance-based 或是 tree-based ，在 feature 夠好的情況下，不管用哪個 model 理論上都可以給出夠好的結果。 mlcc 沒有提到 tree-based 的演算法，所以以下的小結也僅針對 distance-based 的算法。 distance-based  無論在多高維的空間，本質上都要求該 model 的 loss function 最小化，當 model 過於複雜時，最小化的過程都是尋找 loss function 梯度下降的方向，迭代(iteration)求取 loss function 的最小值，此種方法稱為 gradient decent，來得到最佳的 model 。而梯度下降的速率，稱為 learning rate ，會大大決決定結果的好壞</p>
-<ul>
-<li>linear regression<ul>
-<li>最簡單也最快的模型</li>
-<li>如果只有一個 feature ，而有二元分類，則 y=wx+b  可以視為 2D 平面上用一條線把兩群點分開</li>
-<li>loss function 是 MSE(Mean Square Error)</li>
-<li>linear regression 有 exact form ，可以不靠迭代求取最小值</li>
-<li>如果要用線性模型學習顯然為非線性的樣本，可以透過 feature engineering 的方式以 cross product 取得新的特徵，照樣以線性模型學習</li>
-</ul>
-</li>
-<li>logistic regression<ul>
-<li>基本上就是把 linear regression 丟進 sigmoid function，使得預測值介於 0~1 之間，可以看成 probability</li>
-<li>loss function 是 logloss，來自 information theory 中 entropy(熵) 的概念</li>
-<li>分類問題，可以 mapping 成對於要分的每一類，預測機率，有最高機率的該項即為分類確定</li>
-</ul>
-</li>
-<li>neural network<ul>
-<li>要學習簡單的 non-linear model 可以用 cross product 的方式；如果是複雜一點的 non-linear ，可以透過 nn</li>
-<li>nn 的原理是疊加不同的 hidden layer ，包括線性(linear regression)與非線性 hidden layer 來學習 non-linearity</li>
-<li>非線性層是把上一層的 output 經過一個  activation function 達到非線性輸出的 neuron ，主流的 activation funciton 選擇有 ReLU</li>
-<li>nn 降低 loss function 的演算法稱為 back-prop ，可以視為 gradient decent 的變形</li>
-<li>由於 back-prop 需要微分，我們會需要 loss function、activation function 最好是可微，至少是大部分可微</li>
-</ul>
-</li>
-</ul>
-<h2 id="如何訓練一個-model"><a href="#如何訓練一個-model" class="headerlink" title="如何訓練一個 model"></a>如何訓練一個 model</h2><ul>
-<li>首先我們需要先定義問題，或是把問題 mapping 成機器學習可以解決的問題，詳見上述</li>
-<li>再來要好好的清理資料，甚至進行 feature engineering (特徵工程)，等一下會再描述這件事</li>
-<li>適當地把資料分成 training set, test set &amp; validation set，其中 training set 要最多 ，而 validation set 最好不要動它，直到自覺 model 成熟，做最後 generalization(泛化) 的確認</li>
-<li>我們會反覆調整 model 的參數，稱為 hyper-parameter (超參數)，再跑跑看，期望可以達到較成熟的 model <ul>
-<li>在 nn 裡，常常需要調整的是 batch size 和 learning rate</li>
-</ul>
-</li>
-<li>有兩件事我們很不希望發生，一個是 high bias ，表示 model 效力不足；一個是 high variance ，很有可能 model 的複雜度過高，產生 overfitting (過擬合) 的現象<ul>
-<li>high bias ，也稱為 underfitting ，的解決方式<ul>
-<li>調整參數</li>
-<li>調整 model ，增加 layer 或維度，或 model complexity</li>
-<li>增加資料</li>
-</ul>
-</li>
-<li>high variance ，也稱為 overfitting ，的解決方式<ul>
-<li>overfitting 比 underfitting 更需要小心， overfitting 常常伴隨 low bias ，也就是 model 在 test set 上取得夠好的成果，卻在 genralization 時效果極差 </li>
-<li>在 loss-iteration 的圖中，overfitting 往往伴隨 iterations 越多，數值往上走(曲線上翹)的情形 (見下圖)</li>
-<li>避免 over fitting 的技巧，其中一種想法是降低 model complexity ，稱為 regularization (正規化) ，後面再加以描述</li>
-<li>如果是一個好的 model 遇到 overfitting ，加入大量高品質的資料會有效降低 overfitting</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>如何衡量一個 model<ul>
-<li>可以利用 accuracy、precision 和 recall 來衡量是否是一個好的 model</li>
-<li>要先知道什麼是 True Positive(TP)、False Positive(FP)、False Negative(FN)、True Negative(TN)</li>
-<li>可以這樣想，前面的 True/False 是實際上有沒有發生，後面的 Positive/Negative 是 model 有沒有分類正確，<del>如果有人跟你展現機器學習分類的成果，一個裝 B 的方法是，第一個問題就問他 FP rate 如何</del></li>
-<li>Accuracy = (TP + TN) / (TP + TN + FP + FN)</li>
-<li>Precision = TP / (TP + FP)</li>
-<li>Recall = TP / (TP + FN)</li>
-<li>TP-FP 畫出來的圖(TP 為 y 軸、 FP 為 x 軸) 稱為 ROC curve(Receiver Operating Characteristic curve)</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://i.imgur.com/bPT3Xxa.png" alt="overfitting"><br>photo credit: Google mlcc</p>
-<h2 id="feature-engineering"><a href="#feature-engineering" class="headerlink" title="feature engineering"></a>feature engineering</h2><p>mlcc 提供了幾個 good feature 的 properties</p>
-<ul>
-<li>the DOs<ul>
-<li>一個好的 feature 應該在許多樣本裡有非零值</li>
-<li>feature 應該要有清楚的意義，而非流水號、隨機的值，或較難 debug 的值，例如一個人的年齡應該用歲數表達，而非 unix time 表示</li>
-</ul>
-</li>
-<li>the DONTs<ul>
-<li>不應該有 magic number ，例如不該使用 -1 代表這個值不存在或缺省資料，應該用另一個 boolean feature 表達各筆資料是否有這個欄位的值</li>
-<li>feature value 不該隨時間改變，例如股票的市值就隨時間改變，違反了 model 的假設需要穩定性</li>
-<li>不該採用不理性、誇張的離群值，可以用 bucket 作 binning</li>
-</ul>
-</li>
-<li>常用技巧<ul>
-<li>one-hot encoding</li>
-<li>binning</li>
-<li>cross product</li>
-<li>上述技巧結合使用</li>
-</ul>
-</li>
-</ul>
-<h2 id="正規化：避免過於複雜的-model"><a href="#正規化：避免過於複雜的-model" class="headerlink" title="正規化：避免過於複雜的 model"></a>正規化：避免過於複雜的 model</h2><p>前面有提到正規化的目的在於降低 model complexity ，來提供可能解決 overfitting 的方法</p>
-<ul>
-<li>L2<ul>
-<li>for simplicity</li>
-<li>為了簡化 model complexity</li>
-<li>對 weight^2 懲罰</li>
-<li>被懲罰的 weight 會趨近極小但不為 0</li>
-<li>常用</li>
-</ul>
-</li>
-<li>L1<ul>
-<li>for sparsity</li>
-<li>為了消除稀梳矩陣中較少出現的 weight</li>
-<li>對 |weight| (weight 的絕對值) 懲罰</li>
-<li>被懲罰的 weight 可為 0</li>
-</ul>
-</li>
-<li>Dropout<ul>
-<li>nn 裡用來 purge 掉一部分的 weight，詳見<a href="https://brohrer.mcknote.com/zh-Hant/how_machine_learning_works/how_neural_networks_work.html" target="_blank" rel="noopener">資料科學．機器．人的投影片</a></li>
-</ul>
-</li>
-<li>Early Stop<ul>
-<li>提早停止 training iterations</li>
-</ul>
-</li>
-</ul>
-<p>以上，先暫記到這</p>
+<p>我改寫了一個 python 2.7 的程式，去證明 ϵ-greedy 演算法的確比隨機拉臂能夠得到更多報酬</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">from numpy import random</span><br><span class="line">from datetime import datetime</span><br><span class="line">import unittest</span><br><span class="line"></span><br><span class="line">def logger(log_type, msg):</span><br><span class="line">    try:</span><br><span class="line">        print &apos; &#123;&#125; &#123;&#125; &#123;&#125;&apos;.format(log_type.upper(), datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;),  msg)</span><br><span class="line">    except Exception, e:</span><br><span class="line">        print &apos; ERROR logging&apos; + e.message</span><br><span class="line"></span><br><span class="line">class BanditTest(unittest.TestCase):</span><br><span class="line">    def test_basic(self):</span><br><span class="line">        options = list(range(1,6))</span><br><span class="line">        counts = dict(zip(options, [0]*5))</span><br><span class="line">        qlist = dict(zip(options, [0]*5))</span><br><span class="line"></span><br><span class="line">        rewards = dict(zip(options, [2, 3, 5, 1, 4]))</span><br><span class="line">        probs = dict(zip(options, [.6, .5, .2, .7, .05]))</span><br><span class="line"></span><br><span class="line">        netRewardBandit = bandit(100000, qlist, counts, options, rewards, probs)</span><br><span class="line">        netRewardRandom = random_play(100000, options, rewards, probs)</span><br><span class="line">        self.assertTrue(netRewardBandit &gt; netRewardRandom)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def bandit(epochs, qlist, counts, options, rewards, probs):</span><br><span class="line">    epsilon = .1</span><br><span class="line">    netReward = 0</span><br><span class="line"></span><br><span class="line">    for i in range(0, epochs):</span><br><span class="line">        if random.random() &lt; epsilon:</span><br><span class="line">            option = random.choice(options)</span><br><span class="line">        else:</span><br><span class="line">            option = max(qlist, key=qlist.get)</span><br><span class="line">    </span><br><span class="line">        newReward = random.choice([rewards[option],0],p=[probs[option], 1-probs[option]])</span><br><span class="line">        qlist[option] = (qlist[option] * counts[option] + newReward ) / (counts[option] + 1)</span><br><span class="line">        counts[option] = counts[option] + 1</span><br><span class="line">        netReward += newReward</span><br><span class="line"></span><br><span class="line">    print &apos;&apos;</span><br><span class="line">    logger(&apos;INFO&apos;, &apos;Bandit Algo Net Reward: &#123;&#125;, with Epochs: &#123;&#125;&apos;.format(netReward, epochs))</span><br><span class="line">    return netReward </span><br><span class="line"></span><br><span class="line">def random_play(epochs, options, rewards, probs):</span><br><span class="line">    netReward = 0</span><br><span class="line"></span><br><span class="line">    for i in range(0, epochs):</span><br><span class="line">        option = random.choice(options)</span><br><span class="line">        newReward = random.choice([rewards[option],0],p=[probs[option], 1-probs[option]])</span><br><span class="line">        netReward += newReward</span><br><span class="line"></span><br><span class="line">    logger(&apos;INFO&apos;, &apos;Random Algo Net Reward: &#123;&#125;, with Epochs: &#123;&#125;&apos;.format(netReward, epochs))</span><br><span class="line">    return netReward </span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    unittest.main()</span><br></pre></td></tr></table></figure>
+<p>結果如下，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ python bandit.py </span><br><span class="line"></span><br><span class="line"> INFO 2018-08-13 10:18:57 Bandit Algo Net Reward: 117576, with Epochs: 100000</span><br><span class="line"> INFO 2018-08-13 10:19:04 Random Algo Net Reward: 91752, with Epochs: 100000</span><br><span class="line">.</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 1 test in 13.072s</span><br><span class="line"></span><br><span class="line">OK</span><br></pre></td></tr></table></figure></p>
+<p>這種帶有隨機味道的算法，次數太少的時候都容易翻盤，隨機算法可能報酬更大，不過隨著次數增加，算法的表現應該會更好，這邊只做了粗淺的紀錄，也沒分析時間複雜度什麼的，衍伸來說，我們很容易可以改成 adaptive 的方法，只要維持平均報酬的 Q table ，以及每支搖臂(每個選項)的次數統計 count table ，我們就能讓 AI 在遊戲中有越來越好的選擇</p>
+<p>此外，我們也可以設計一個多個 row 的 Q table / count table，當 AI 需要做決策時，可以依據不同的 game state 去執行 ϵ-greedy 算法，這樣想起來應用真的是蠻廣的，跟上述的例子比起來，上述的演算法只有一個 row 的 Q table / count table ，多 row 的情況就請有需要的讀者自行實作一下</p>
 
       
     </div>
@@ -544,9 +419,13 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/mlcc/" rel="tag"># mlcc</a>
+            <a href="/blog/tags/algo/" rel="tag"># algo</a>
           
-            <a href="/blog/tags/machine-learning/" rel="tag"># machine learning</a>
+            <a href="/blog/tags/reinforcement-learning/" rel="tag"># reinforcement learning</a>
+          
+            <a href="/blog/tags/epsilon-greedy/" rel="tag"># epsilon-greedy</a>
+          
+            <a href="/blog/tags/multi-armed-bandit-machine/" rel="tag"># multi-armed bandit machine</a>
           
         </div>
       
@@ -559,8 +438,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018-06-12-CI-CD-pipeline-suggestion-under-microservices-for-developer/" rel="next" title="微服務下 RD 的 CI/CD 流水線">
-                <i class="fa fa-chevron-left"></i> 微服務下 RD 的 CI/CD 流水線
+              <a href="/blog/2018-06-14-class-note-of-machine-learning-crash-course/" rel="next" title="machine learning crash course(mlcc) 修課心得">
+                <i class="fa fa-chevron-left"></i> machine learning crash course(mlcc) 修課心得
               </a>
             
           </div>
@@ -568,10 +447,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018-08-13-the-multi-armed-bandit-problem/" rel="prev" title="強化學習基礎：多臂吃角子老虎機問題">
-                強化學習基礎：多臂吃角子老虎機問題 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -630,17 +505,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -764,22 +630,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#機器學習能解決的問題"><span class="nav-number">1.</span> <span class="nav-text">機器學習能解決的問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#線性迴歸與神經網路"><span class="nav-number">2.</span> <span class="nav-text">線性迴歸與神經網路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何訓練一個-model"><span class="nav-number">3.</span> <span class="nav-text">如何訓練一個 model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feature-engineering"><span class="nav-number">4.</span> <span class="nav-text">feature engineering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正規化：避免過於複雜的-model"><span class="nav-number">5.</span> <span class="nav-text">正規化：避免過於複雜的 model</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -928,9 +778,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'https://yiidtw.github.io/blog/2018-06-14-class-note-of-machine-learning-crash-course/';
-        this.page.identifier = '2018-06-14-class-note-of-machine-learning-crash-course/';
-        this.page.title = 'machine learning crash course(mlcc) 修課心得';
+        this.page.url = 'https://yiidtw.github.io/blog/2018-08-13-the-multi-armed-bandit-problem/';
+        this.page.identifier = '2018-08-13-the-multi-armed-bandit-problem/';
+        this.page.title = '強化學習基礎：多臂吃角子老虎機問題';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
