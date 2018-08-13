@@ -291,12 +291,13 @@ $ ~/bin/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -prof
 ```
 
 將這 3 個子資料夾下產生的所有檔案，各自 scp 到 3 台 etcd server 的 /etc/etcd/ssl，然後在這 3 台 etcd server 分別執行
+
 ```
-$ cd ~; curl -sSL https://github.com/coreos/etcd/releases/download/v3.1.10/etcd-v3.1.10-linux-amd64.tar.gz \
- | sudo tar -xzv --strip-components=1 -C /usr/local/bin/; \
-$ sudo chown root:root /usr/local/bin/etcd*; \
+$ cd ~ 
+$ curl -sSL https://github.com/coreos/etcd/releases/download/v3.1.10/etcd-v3.1.10-linux-amd64.tar.gz | sudo tar -xzv --strip-components=1 -C /usr/local/bin/
+$ sudo chown root:root /usr/local/bin/etcd*
 $ sudo systemctl daemon-reload && sudo systemctl enable etcd && sudo systemctl restart etcd
-``` 
+```
 
 這樣， etcd 就裝完了 XD
 

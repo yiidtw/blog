@@ -25,7 +25,7 @@ tags:
 
 我改寫了一個 python 2.7 的程式，去證明 ϵ-greedy 演算法的確比隨機拉臂能夠得到更多報酬
 
-```
+```python
 from numpy import random
 from datetime import datetime
 import unittest
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 ```
 
 結果如下，
-```
+```bash
 $ python bandit.py 
 
  INFO 2018-08-13 10:18:57 Bandit Algo Net Reward: 117576, with Epochs: 100000
