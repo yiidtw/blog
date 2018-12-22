@@ -1,9 +1,12 @@
+node_modules/
+themes/
+todo/
+.deploy*/
+public/
+*.log
+*.swp
+*.swo
 .DS_Store
 Thumbs.db
 db.json
-*.log
-node_modules/
-public/
-.deploy*/
 yarn.lock
-themes/
