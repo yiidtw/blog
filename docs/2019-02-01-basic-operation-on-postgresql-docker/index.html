@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-tw,en,default">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Muse',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="這兩天都在把 MySQL10 的資料搬到 PostgreSQL10，稍微紀錄一下開發筆記，開發環境是 CentOS7 ，已經很習慣用 docker 來做開發了，如果沒有 docker ，裝個 db 卸載個 db 該有多麻煩… PostgreSQL Docker先拉 image，然後用互動模式跑起來測測看12345678910$ docker pull postgres:10-alpine$ doc">
+<meta name="keywords" content="CentOS7,PostgreSQL10,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 PostgreSQL Docker 的基本操作">
+<meta property="og:url" content="https://yiidtw.github.io/blog/2019-02-01-basic-operation-on-postgresql-docker/index.html">
+<meta property="og:site_name" content="YIIDTW">
+<meta property="og:description" content="這兩天都在把 MySQL10 的資料搬到 PostgreSQL10，稍微紀錄一下開發筆記，開發環境是 CentOS7 ，已經很習慣用 docker 來做開發了，如果沒有 docker ，裝個 db 卸載個 db 該有多麻煩… PostgreSQL Docker先拉 image，然後用互動模式跑起來測測看12345678910$ docker pull postgres:10-alpine$ doc">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2019-01-31T17:35:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 PostgreSQL Docker 的基本操作">
+<meta name="twitter:description" content="這兩天都在把 MySQL10 的資料搬到 PostgreSQL10，稍微紀錄一下開發筆記，開發環境是 CentOS7 ，已經很習慣用 docker 來做開發了，如果沒有 docker ，裝個 db 卸載個 db 該有多麻煩… PostgreSQL Docker先拉 image，然後用互動模式跑起來測測看12345678910$ docker pull postgres:10-alpine$ doc">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yiidtw.github.io/blog/2019-02-01-basic-operation-on-postgresql-docker/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用 PostgreSQL Docker 的基本操作 | YIIDTW</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YIIDTW</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yiidtw.github.io/blog/blog/2019-02-01-basic-operation-on-postgresql-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yiidtw">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YIIDTW">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用 PostgreSQL Docker 的基本操作
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-02-01 00:43:02 / Modified: 01:35:02" itemprop="dateCreated datePublished" datetime="2019-02-01T00:43:02+08:00">2019-02-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/blog/2019-02-01-basic-operation-on-postgresql-docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019-02-01-basic-operation-on-postgresql-docker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/blog/2019-02-01-basic-operation-on-postgresql-docker/" class="leancloud_visitors" data-flag-title="使用 PostgreSQL Docker 的基本操作">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>這兩天都在把 MySQL10 的資料搬到 PostgreSQL10，稍微紀錄一下開發筆記，開發環境是 CentOS7 ，已經很習慣用 docker 來做開發了，如果沒有 docker ，裝個 db 卸載個 db 該有多麻煩…</p>
+<h2 id="PostgreSQL-Docker"><a href="#PostgreSQL-Docker" class="headerlink" title="PostgreSQL Docker"></a>PostgreSQL Docker</h2><p>先拉 image，然後用互動模式跑起來測測看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull postgres:10-alpine</span><br><span class="line">$ docker run -it --rm --name postgresql \</span><br><span class="line">    -e POSTGRES_PASSWORD=$&#123;USER_PASS&#125; -e POSTGRES_USER=$&#123;USER_NAME&#125; -d \</span><br><span class="line">    -p 5432:5432 \</span><br><span class="line">    --net host \</span><br><span class="line">    -v /etc/hosts:/etc/hosts:ro \</span><br><span class="line">    -v /sys/fs/cgroup:/sys/fs/cgroup:ro \</span><br><span class="line">    -v /usr/share/zoneinfo/Asia/Taipei:/etc/localtime:ro \</span><br><span class="line">    -v $&#123;WORKING_DIR&#125;/data:/var/lib/postgresql/data \</span><br><span class="line">    postgres:10-alpine</span><br></pre></td></tr></table></figure></p>
+<p>Docker 如果能順利 run 起來應該沒有太大問題，既然都開進 docker 裡了，而且我們的 data 是 mount 在 host 上的，可以順便修改<code>/var/lib/postgresql/data/pg_hba.conf</code>，讓 host 上的 pg client 連 docker 裡的 pg server 可以免密碼，這招在 docker compose 上使用的時候，也可以省很多次打密碼的時間…</p>
+<p>然後在開發 vm 上要裝 postgresql 的 client ， CentOS7 預設的版本是 9 ，我們的 docker 是用 10 的，所以 client 也最好用 10</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rpm -Uvh https://yum.postgresql.org/10/redhat/rhel-7-x86_64/pgdg-centos10-10-2.noarch.rpm</span><br><span class="line">$ sudo yum install -y postgresql10</span><br></pre></td></tr></table></figure>
+<p>然後那一包 bin 都在 <code>/usr/pgsql-10/bin/</code> 裡，為了和預設的 pg9 cleint 做區別，我這裡都做 alias<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ln -s /usr/pgsql-10/bin/psql /usr/local/bin/psql10</span><br><span class="line">$ sudo ln -s /usr/pgsql-10/bin/pg_dump /usr/local/bin/pg_dump10</span><br><span class="line">$ sudo ln -s /usr/pgsql-10/bin/pg_restore /usr/local/bin/pg_restore10</span><br></pre></td></tr></table></figure></p>
+<p>稍微測一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ psql10 --version</span><br><span class="line">psql (PostgreSQL) 10.6</span><br></pre></td></tr></table></figure></p>
+<h2 id="Docker-compose-with-MySQL-and-PostgreSQL"><a href="#Docker-compose-with-MySQL-and-PostgreSQL" class="headerlink" title="Docker compose with MySQL and PostgreSQL"></a>Docker compose with MySQL and PostgreSQL</h2><p>稍微寫一個 docker-compose.yml 同時開這兩個 db 的範例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">version: &apos;2.1&apos;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">    mysql:</span><br><span class="line">        container_name: mysql </span><br><span class="line">        hostname: mysql.mydomain</span><br><span class="line">        restart: always</span><br><span class="line">        privileged: true</span><br><span class="line">        networks:</span><br><span class="line">            mynet:</span><br><span class="line">                ipv4_address: 172.20.0.2</span><br><span class="line">        ports:</span><br><span class="line">            - 3306:3306</span><br><span class="line">        image: mariadb/server:10.2</span><br><span class="line">        environment:</span><br><span class="line">            - MYSQL_ROOT_PASSWORD=$&#123;ROOT_PASS&#125;</span><br><span class="line">            - MYSQL_USER=$&#123;USER_NAME&#125;</span><br><span class="line">            - MYSQL_PASSWORD=$&#123;USER_PASS&#125;</span><br><span class="line">        volumes:</span><br><span class="line">            - /etc/hosts:/etc/hosts:ro</span><br><span class="line">            - /sys/fs/cgroup:/sys/fs/cgroup:ro</span><br><span class="line">            - /usr/share/zoneinfo/Asia/Taipei:/etc/localtime:ro</span><br><span class="line">            - $&#123;WORKING_DIR&#125;/mysql/data:/var/lib/mysql</span><br><span class="line">            - $&#123;WORKING_DIR&#125;/mysql/log:/var/log/mysql</span><br><span class="line">    postgresql:</span><br><span class="line">        container_name: postgresql</span><br><span class="line">        hostname: postgresql.mydomain</span><br><span class="line">        restart: always</span><br><span class="line">        privileged: true</span><br><span class="line">        networks:</span><br><span class="line">            mynet:</span><br><span class="line">                ipv4_address: 172.20.0.3</span><br><span class="line">        image: postgres:10-alpine</span><br><span class="line">        ports:</span><br><span class="line">            - 5432:5432 </span><br><span class="line">        environment:</span><br><span class="line">            - POSTGRES_DB=$&#123;MY_DB&#125;</span><br><span class="line">            - POSTGRES_USER=$&#123;USER_NAME&#125;</span><br><span class="line">            - POSTGRES_PASSWORD=$&#123;USER_PASS&#125;</span><br><span class="line">        volumes:</span><br><span class="line">            - /etc/hosts:/etc/hosts:ro</span><br><span class="line">            - /sys/fs/cgroup:/sys/fs/cgroup:ro</span><br><span class="line">            - /usr/share/zoneinfo/Asia/Taipei:/etc/localtime:ro</span><br><span class="line">            - $&#123;WORKING_DIR&#125;/postgresql/data/mnt:/var/lib/postgresql/data </span><br><span class="line">networks:</span><br><span class="line">    mynet:</span><br><span class="line">        name: mynet</span><br><span class="line">        enable_ipv6: false</span><br><span class="line">        ipam:</span><br><span class="line">            config:</span><br><span class="line">            - subnet: 172.20.0.0/16</span><br></pre></td></tr></table></figure></p>
+<p>這樣會建立一個 bridge network 是 172.20.0.0/16 ，上面兩個 container 可以和 host 在這個網段下溝通，也可以透過 host 連外，記得裝一下 MySQL 的 client 連連看，這邊就不多寫了，剛剛那個<code>/var/lib/postgresql/data/pg_hba.conf</code> ，也可以添加這句，達到免密碼登入 pg</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">host    all             all             172.20.0.1/16           trust</span><br></pre></td></tr></table></figure>
+<h2 id="pgloader"><a href="#pgloader" class="headerlink" title="pgloader"></a>pgloader</h2><p>由上面的筆記走到這邊，應該 MySQL 和 PostgreSQL 的 container 都建好了，假設現在 MySQL 裡面有一些資料，我們想要直接 copy 到 pg ，最暴力的那種，細節先不多說</p>
+<p>以上述例子提到的 ip 和 docker network 來說<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --security-opt seccomp=unconfined \</span><br><span class="line">    --rm --net mynet --name pgloader \</span><br><span class="line">    dimitri/pgloader:latest pgloader \</span><br><span class="line">    mysql://$&#123;USER_NAME&#125;:$&#123;USER_PASS&#125;@172.19.0.2/$&#123;MY_DB&#125; \</span><br><span class="line">    postgresql://$&#123;USER_NAME&#125;@172.20.0.3/$&#123;MY_DB&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果一切順利的話，這樣就搬完了，當然你不會對自動幫你 copy 的 pg schema 太滿意 XDD</p>
+<h2 id="pg-的-dump-和-restore"><a href="#pg-的-dump-和-restore" class="headerlink" title="pg 的 dump 和 restore"></a>pg 的 dump 和 restore</h2><p>剛剛我們有針對 pg10 的 dump 和 restore 做過 alias ，現在可以直接拿來用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pg_dump10 -h pg_ip -U your_username -p 5432 -F c -v -f &quot;your_backup.bak&quot; pg_db_name </span><br><span class="line">$ pg_restore10 -v -h pg_ip -U your_username -p 5432 -d pg_db_name &quot;your_backup.bak&quot;</span><br></pre></td></tr></table></figure>
+<p>其中 dump 的 -F 參數改成 p ，可以輸出 sql 檔</p>
+<p>以上，快速做個整理</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/CentOS7/" rel="tag"># CentOS7</a>
+          
+            <a href="/blog/tags/PostgreSQL10/" rel="tag"># PostgreSQL10</a>
+          
+            <a href="/blog/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019-01-26-python-exception-in-general/" rel="next" title="Python Tips 通用的例外處理">
+                <i class="fa fa-chevron-left"></i> Python Tips 通用的例外處理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yiidtw</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yiidtw" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yiidtw@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PostgreSQL-Docker"><span class="nav-number">1.</span> <span class="nav-text">PostgreSQL Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-compose-with-MySQL-and-PostgreSQL"><span class="nav-number">2.</span> <span class="nav-text">Docker compose with MySQL and PostgreSQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pgloader"><span class="nav-number">3.</span> <span class="nav-text">pgloader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pg-的-dump-和-restore"><span class="nav-number">4.</span> <span class="nav-text">pg 的 dump 和 restore</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yiidtw</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://yiidtw.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://yiidtw.github.io/blog/2019-02-01-basic-operation-on-postgresql-docker/';
+        this.page.identifier = '2019-02-01-basic-operation-on-postgresql-docker/';
+        this.page.title = '使用 PostgreSQL Docker 的基本操作';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://yiidtw.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kwL7BgyA2RkLswGBiifs2bVf-gzGzoHsz", "fC1HqhCnxuN9PuP85up8lvwW");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
